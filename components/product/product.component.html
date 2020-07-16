@@ -1,0 +1,26 @@
+<div class="product">
+  <div class="product-header">
+    <h3>{{product.name}}</h3>
+  </div>
+  <div class="product-content">
+    <div class="product-image">
+      <app-file-slider *ngIf="product.files.length" [fileIds]="product.files" [items]="1"></app-file-slider>
+    </div>
+    <div class="product-description">
+      <p>{{product.description}}</p>
+    </div>
+    <div class="product-description-long" *ngIf="product.longDescription">
+      <button class="more-button" (click)="longDescription = !longDescription"
+              [ngClass]="{active:(longDescription)}">{{app.text('read_more', 'shop')}}</button>
+      <p *ngIf="longDescription">{{product.longDescription}}</p>
+    </div>
+  </div>
+  <div class="product-footer">
+    <div class="product-price">
+      <h4>{{product.price}}</h4>
+    </div>
+    <button *ngIf="cart" class="cart-button" (click)="app.shop.addToCart(product, 1)">
+      {{app.text('add_to_cart', 'shop')}}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="cart-container" *ngIf="app.shop && app.shop.cart">
+  <div *ngFor="let cartObject of app.shop.cart">
+    <div class="cart-product" *ngIf="app.shop.productById(cartObject.productId)">
+      <div class="product-name">{{app.shop.productById(cartObject.productId).name}}</div>
+      <div class="product-amount">{{cartObject.amount}}</div>
+    </div>
+  </div>
+</div>
