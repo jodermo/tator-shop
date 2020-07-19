@@ -50,16 +50,16 @@ import { TatorShopModule } from './modules/tator-shop/tator-shop.module';
 Edit file: `nest-app/import.module.ts`
 
 ```typescript
-import { CurrencyModule } from '../angular-app/plugins/tator-shop/nest/currency/currency.module';
-import { DiscountModule } from '../angular-app/plugins/tator-shop/nest/discount/discount.module';
-import { ManufacturerModule } from '../angular-app/plugins/tator-shop/nest/manufacturer/manufacturer.module';
-import { OrderModule } from '../angular-app/plugins/tator-shop/nest/order/order.module';
-import { PaymentModule } from '../angular-app/plugins/tator-shop/nest/payment/payment.module';
-import { ProductCategoryModule } from '../angular-app/plugins/tator-shop/nest/product-category/product-category.module';
-import { ProductGroupModule } from '../angular-app/plugins/tator-shop/nest/product-group/product-group.module';
-import { ProductModule } from '../angular-app/plugins/tator-shop/nest/product/product.module';
-import { ShippingModule } from '../angular-app/plugins/tator-shop/nest/shipping/shipping.module';
-import { TaxModule } from '../angular-app/plugins/tator-shop/nest/tax/tax.module';
+import { PaymentModule } from '../angular-app/modules/tator-shop/nest/payment/payment.module';
+import { CurrencyModule } from '../angular-app/modules/tator-shop/nest/currency/currency.module';
+import { DiscountModule } from '../angular-app/modules/tator-shop/nest/discount/discount.module';
+import { ProductGroupModule } from '../angular-app/modules/tator-shop/nest/product-group/product-group.module';
+import { TaxModule } from '../angular-app/modules/tator-shop/nest/tax/tax.module';
+import { ProductCategoryModule } from '../angular-app/modules/tator-shop/nest/product-category/product-category.module';
+import { OrderModule } from '../angular-app/modules/tator-shop/nest/order/order.module';
+import { ProductModule } from '../angular-app/modules/tator-shop/nest/product/product.module';
+import { ShippingModule } from '../angular-app/modules/tator-shop/nest/shipping/shipping.module';
+import { ManufacturerModule } from '../angular-app/modules/tator-shop/nest/manufacturer/manufacturer.module';
 ```
 ```typescript
 @Module({
