@@ -9,9 +9,78 @@ Product Manager • Cash registry • Online Shop • Accounting
 
 #### Install module
 
+#### 1. add repository as submodule
+
 ```bash
 git submodule add https://github.com/jodermo/tator-shop.git angular-app/modules/tator-shop --name tator-shop
 ```
+
+#### 2. add angular module
+
+Edit file: `angular-app/import.module.ts`
+
+```typescript
+import { TatorShopModule } from '../../modules/tator-shop/tator-shop.module';
+```
+
+```typescript
+@NgModule({
+    imports: [
+        TatorShopModule,
+    ],
+    exports: [
+        TatorShopModule,
+    ],
+})
+```
+
+<br>
+
+#### 3. add nest.js modules
+
+Edit file: `nest-app/import.module.ts`
+
+```typescript
+import { CurrencyModule } from '../angular-app/plugins/tator-shop/nest/currency/currency.module';
+import { DiscountModule } from '../angular-app/plugins/tator-shop/nest/discount/discount.module';
+import { ManufacturerModule } from '../angular-app/plugins/tator-shop/nest/manufacturer/manufacturer.module';
+import { OrderModule } from '../angular-app/plugins/tator-shop/nest/order/order.module';
+import { PaymentModule } from '../angular-app/plugins/tator-shop/nest/payment/payment.module';
+import { ProductCategoryModule } from '../angular-app/plugins/tator-shop/nest/product-category/product-category.module';
+import { ProductGroupModule } from '../angular-app/plugins/tator-shop/nest/product-group/product-group.module';
+import { ProductModule } from '../angular-app/plugins/tator-shop/nest/product/product.module';
+import { ShippingModule } from '../angular-app/plugins/tator-shop/nest/shipping/shipping.module';
+import { TaxModule } from '../angular-app/plugins/tator-shop/nest/tax/tax.module';
+```
+```typescript
+@Module({
+    imports: [
+        CurrencyModule,
+        DiscountModule
+        ManufacturerModule,
+        OrderModule,
+        PaymentModule,
+        ProductCategoryModule,
+        ProductGroupModule,
+        ProductModule,
+        ShippingModule,
+        TaxModule,
+    ],
+    exports: [
+        CurrencyModule,
+        DiscountModule
+        ManufacturerModule,
+        OrderModule,
+        PaymentModule,
+        ProductCategoryModule,
+        ProductGroupModule,
+        ProductModule,
+        ShippingModule,
+        TaxModule,
+    ],
+})
+```
+
 
 ### Documentation
 #### [Installation](https://github.com/jodermo/tator/tree/master/documentation/installation.md)
