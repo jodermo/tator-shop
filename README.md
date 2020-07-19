@@ -29,7 +29,7 @@ git submodule add https://github.com/jodermo/tator-shop.git angular-app/modules/
 Edit file: `angular-app/import.module.ts`
 
 ```typescript
-import { TatorShopModule } from '../../modules/tator-shop/tator-shop.module';
+import { TatorShopModule } from './modules/tator-shop/tator-shop.module';
 ```
 
 ```typescript
