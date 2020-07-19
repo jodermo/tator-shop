@@ -16,7 +16,7 @@ Product Manager • Cash registry • Online Shop • Accounting
 <br>
 <br>
 
-#### Install module
+## Install module
 
 #### 1. add repository as submodule
 
