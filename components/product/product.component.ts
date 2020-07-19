@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Product } from '../../api/product.entity';
 import { AppService } from '../../../tator-core/services/app.service';
+import { ShopService } from '../../shop.service';
 
 @Component({
   selector: 'app-product',
@@ -14,7 +15,7 @@ export class ProductComponent implements OnInit, OnChanges {
   cart = true;
   edit = true;
 
-  constructor(public app: AppService) {
+  constructor(public app: AppService, public shop: ShopService) {
   }
 
   ngOnInit() {

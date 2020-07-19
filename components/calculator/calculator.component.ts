@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AppService } from '../../../tator-core/services/app.service';
+import { ShopService } from '../../shop.service';
 
 @Component({
   selector: 'app-calculator',
@@ -52,7 +54,7 @@ export class CalculatorComponent implements OnInit {
   pressTimeout = 250;
   pressTimer;
 
-  constructor() {
+  constructor(public app: AppService, public shop: ShopService) {
   }
 
   ngOnInit() {

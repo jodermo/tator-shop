@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../../../../tator-core/services/app.service';
+import { ShopService } from '../../../shop.service';
 
 @Component({
   selector: 'app-shop-configuration',
@@ -8,7 +9,7 @@ import { AppService } from '../../../../tator-core/services/app.service';
 })
 export class ShopConfigurationComponent implements OnInit {
 
-  constructor(public app: AppService) { }
+  constructor(public app: AppService, public shop: ShopService) { }
 
   ngOnInit(): void {
   }

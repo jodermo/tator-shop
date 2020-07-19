@@ -4,11 +4,11 @@ import { ProductOverviewComponent } from './components/backend/product-overview/
 import { CartComponent } from './components/cart/cart.component';
 import { ShopOverviewComponent } from './components/backend/shop-overview/shop-overview.component';
 import { ShopConfigurationComponent } from './components/backend/shop-configuration/shop-configuration.component';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
 import { CashRegisterComponent } from './components/cash-register/cash-register.component';
-import { TatorCoreModule } from '../tator-core/tator-core.module';
 import { CalculatorComponent } from './components/calculator/calculator.component';
+import { TatorImportsModule } from '../../src/app/tator-imports.module';
+import { TatorDataComponentsModule } from '../tator-core/tator-data-components.module';
+import { TatorUiComponentsModule } from '../tator-core/tator-ui-components.module';
 
 @NgModule({
   declarations: [
@@ -21,9 +21,9 @@ import { CalculatorComponent } from './components/calculator/calculator.componen
     CalculatorComponent
   ],
   imports: [
-    BrowserModule,
-    FormsModule,
-    TatorCoreModule,
+    TatorImportsModule,
+    TatorDataComponentsModule,
+    TatorUiComponentsModule,
   ],
   providers: [
 

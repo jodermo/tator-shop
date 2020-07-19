@@ -39,7 +39,7 @@ export class CartObject {
   providedIn: 'root'
 })
 export class ShopService {
-  public app: AppService;
+
   config = ShopConfig;
   loading = false;
   updating = false;
@@ -103,7 +103,7 @@ export class ShopService {
   filterMethod = this.filterMethods[0];
   filterValue: string;
 
-  constructor() {
+  constructor(public app: AppService) {
 
   }
 
