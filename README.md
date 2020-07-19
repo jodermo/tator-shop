@@ -7,6 +7,12 @@ Product Manager • Cash registry • Online Shop • Accounting
 
 <br>
 
+#### Install module
+
+```bash
+git submodule add https://github.com/jodermo/tator-shop.git angular-app/modules/tator-shop --name tator-shop
+```
+
 ### Documentation
 #### [Installation](https://github.com/jodermo/tator/tree/master/documentation/installation.md)
 #### [Deployment](https://github.com/jodermo/tator/tree/master/documentation/deployment.md)
