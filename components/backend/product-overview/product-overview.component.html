@@ -3,36 +3,36 @@
     <div class="article-title">
       <span>{{app.text('product_groups', 'shop')}}</span>
       <div class="horizontal-flex flex-item flex-end">
-        <button class="new-button" (click)="app.shop.newProductGroup()"></button>
+        <button class="new-button" (click)="shop.newProductGroup()"></button>
       </div>
     </div>
     <div class="article-content">
       <app-data-selection [tableName]="'product-group'" [data]="app.data.table('product-group')"
-                          (onEntryEdit)="app.shop.currentProduct = $event;"></app-data-selection>
+                          (onEntryEdit)="shop.currentProduct = $event;"></app-data-selection>
     </div>
   </div>
   <div class="article full">
     <div class="article-title">
       <span>{{app.text('product_categories', 'shop')}}</span>
       <div class="horizontal-flex flex-item flex-end">
-        <button class="new-button" (click)="app.shop.newProductCategory()"></button>
+        <button class="new-button" (click)="shop.newProductCategory()"></button>
       </div>
     </div>
     <div class="article-content">
       <app-data-selection [tableName]="'product-category'" [data]="app.data.table('product-category')"
-                          (onEntryEdit)="app.shop.currentProduct = $event;"></app-data-selection>
+                          (onEntryEdit)="shop.currentProduct = $event;"></app-data-selection>
     </div>
   </div>
   <div class="article full">
     <div class="article-title">
       <span>{{app.text('manufacturer', 'shop')}}</span>
       <div class="horizontal-flex flex-item flex-end">
-        <button class="new-button" (click)="app.shop.newManufacturer()"></button>
+        <button class="new-button" (click)="shop.newManufacturer()"></button>
       </div>
     </div>
     <div class="article-content">
       <app-data-selection [tableName]="'manufacturer'" [data]="app.data.table('manufacturer')"
-                          (onEntryEdit)="app.shop.currentProduct = $event;"></app-data-selection>
+                          (onEntryEdit)="shop.currentProduct = $event;"></app-data-selection>
     </div>
   </div>
 </div>
@@ -41,38 +41,38 @@
     <div class="article-title">
         <span>{{app.text('product_preview', 'shop')}}</span>
         <div class="horizontal-flex flex-item flex-end">
-          <button *ngIf="app.shop.previewProduct" class="edit-button"
-                  (click)="app.shop.currentProduct = app.shop.previewProduct"></button>
+          <button *ngIf="shop.previewProduct" class="edit-button"
+                  (click)="shop.currentProduct = shop.previewProduct"></button>
         </div>
     </div>
     <div class="article-content">
       <app-cart></app-cart>
-      <app-product *ngIf="app.shop.previewProduct" [product]="app.shop.previewProduct"></app-product>
+      <app-product *ngIf="shop.previewProduct" [product]="shop.previewProduct"></app-product>
     </div>
   </div>
   <div class="article full flex-item">
     <div class="article-title">
         <span>{{app.text('products', 'shop')}}</span>
         <div class="horizontal-flex flex-item flex-end">
-          <button class="new-button" (click)="app.shop.newProduct()"></button>
+          <button class="new-button" (click)="shop.newProduct()"></button>
       </div>
     </div>
     <div class="article-content">
       <app-data-selection [tableName]="'product'" [data]="app.data.table('product')"
-                          (onEntryEdit)="app.shop.currentProduct = $event;"></app-data-selection>
+                          (onEntryEdit)="shop.currentProduct = $event;"></app-data-selection>
     </div>
   </div>
 </div>
 
-<div class="popup-overlay layout-{{app.popupLayout}}" [ngClass]="{active:(app.shop.currentProduct)}">
-  <div class="popup-container"  *ngIf="app.shop.currentProduct">
+<div class="popup-overlay layout-{{app.popupLayout}}" [ngClass]="{active:(shop.currentProduct)}">
+  <div class="popup-container"  *ngIf="shop.currentProduct">
     <div class="popup-header">
       <h3>{{app.text('product', 'shop')}}</h3>
       <app-popup-options></app-popup-options>
-      <button class="close-button" (click)="app.shop.currentProduct = null"></button>
+      <button class="close-button" (click)="shop.currentProduct = null"></button>
     </div>
     <div class="popup-content">
-      <app-data-editor [data]="app.shop.currentProduct" [fieldOptions]="{
+      <app-data-editor [data]="shop.currentProduct" [fieldOptions]="{
         categoryId: {name: 'product_category', type: 'select', tableName: 'product-category'},
         groupId: {name: 'product_group', type: 'select', tableName: 'product-group'},
         manufacturerId: {name: 'manufacturer', type: 'select', tableName: 'manufacturer'},
@@ -84,65 +84,65 @@
     </div>
     <div class="popup-footer">
       <button class="save-button"
-              (click)="app.shop.updateOrAddProduct(app.shop.currentProduct); app.shop.currentProduct = null;"
-              [ngClass]="{inactive:(app.shop.updating)}">{{app.text('save')}}
+              (click)="shop.updateOrAddProduct(shop.currentProduct); shop.currentProduct = null;"
+              [ngClass]="{inactive:(shop.updating)}">{{app.text('save')}}
       </button>
     </div>
   </div>
 </div>
 
-<div class="popup-overlay layout-{{app.popupLayout}}" [ngClass]="{active:(app.shop.currentProductCategory)}">
-  <div class="popup-container"  *ngIf="app.shop.currentProductCategory">
+<div class="popup-overlay layout-{{app.popupLayout}}" [ngClass]="{active:(shop.currentProductCategory)}">
+  <div class="popup-container"  *ngIf="shop.currentProductCategory">
     <div class="popup-header">
       <h3>{{app.text('product_category', 'shop')}}</h3>
       <app-popup-options></app-popup-options>
-      <button class="close-button" (click)="app.shop.currentProductCategory = null"></button>
+      <button class="close-button" (click)="shop.currentProductCategory = null"></button>
     </div>
     <div class="popup-content">
-      <app-data-editor [data]="app.shop.currentProductCategory"></app-data-editor>
+      <app-data-editor [data]="shop.currentProductCategory"></app-data-editor>
     </div>
     <div class="popup-footer">
       <button class="save-button"
-              (click)="app.shop.updateOrAddProductCategory(app.shop.currentProductCategory); app.shop.currentProductCategory = null;"
-              [ngClass]="{inactive:(app.shop.updating)}">{{app.text('save')}}
+              (click)="shop.updateOrAddProductCategory(shop.currentProductCategory); shop.currentProductCategory = null;"
+              [ngClass]="{inactive:(shop.updating)}">{{app.text('save')}}
       </button>
     </div>
   </div>
 </div>
 
-<div class="popup-overlay layout-{{app.popupLayout}}" [ngClass]="{active:(app.shop.currentProductGroup)}">
-  <div class="popup-container" *ngIf="app.shop.currentProductGroup">
+<div class="popup-overlay layout-{{app.popupLayout}}" [ngClass]="{active:(shop.currentProductGroup)}">
+  <div class="popup-container" *ngIf="shop.currentProductGroup">
     <div class="popup-header">
       <h3>{{app.text('product_group', 'shop')}}</h3>
       <app-popup-options></app-popup-options>
-      <button class="close-button" (click)="app.shop.currentProductGroup = null"></button>
+      <button class="close-button" (click)="shop.currentProductGroup = null"></button>
     </div>
     <div class="popup-content">
-      <app-data-editor [data]="app.shop.currentProductGroup"></app-data-editor>
+      <app-data-editor [data]="shop.currentProductGroup"></app-data-editor>
     </div>
     <div class="popup-footer">
       <button class="save-button"
-              (click)="app.shop.updateOrAddProductGroup(app.shop.currentProductGroup); app.shop.currentProductGroup = null;"
-              [ngClass]="{inactive:(app.shop.updating)}">{{app.text('save')}}
+              (click)="shop.updateOrAddProductGroup(shop.currentProductGroup); shop.currentProductGroup = null;"
+              [ngClass]="{inactive:(shop.updating)}">{{app.text('save')}}
       </button>
     </div>
   </div>
 </div>
 
-<div class="popup-overlay layout-{{app.popupLayout}}" [ngClass]="{active:(app.shop.currentManufacturer)}">
-  <div class="popup-container" *ngIf="app.shop.currentManufacturer">
+<div class="popup-overlay layout-{{app.popupLayout}}" [ngClass]="{active:(shop.currentManufacturer)}">
+  <div class="popup-container" *ngIf="shop.currentManufacturer">
     <div class="popup-header">
       <h3>{{app.text('manufacturer', 'shop')}}</h3>
       <app-popup-options></app-popup-options>
-      <button class="close-button" (click)="app.shop.currentManufacturer = null"></button>
+      <button class="close-button" (click)="shop.currentManufacturer = null"></button>
     </div>
     <div class="popup-content">
-      <app-data-editor [data]="app.shop.currentManufacturer"></app-data-editor>
+      <app-data-editor [data]="shop.currentManufacturer"></app-data-editor>
     </div>
     <div class="popup-footer">
       <button class="save-button"
-              (click)="app.shop.updateOrAddManufacturer(app.shop.currentManufacturer); app.shop.currentManufacturer = null;"
-              [ngClass]="{inactive:(app.shop.updating)}">{{app.text('save')}}
+              (click)="shop.updateOrAddManufacturer(shop.currentManufacturer); shop.currentManufacturer = null;"
+              [ngClass]="{inactive:(shop.updating)}">{{app.text('save')}}
       </button>
     </div>
   </div>

@@ -19,7 +19,7 @@
     <div class="product-price">
       <h4>{{product.price}}</h4>
     </div>
-    <button *ngIf="cart" class="cart-button" (click)="app.shop.addToCart(product, 1)">
+    <button *ngIf="cart" class="cart-button" (click)="shop.addToCart(product, 1)">
       {{app.text('add_to_cart', 'shop')}}
     </button>
   </div>
