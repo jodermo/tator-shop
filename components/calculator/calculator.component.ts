@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AppService } from '../../../tator-core/services/app.service';
 import { ShopService } from '../../shop.service';
+import { AppService } from '../../../../tator-app/angular-app/modules/tator-core/services/app.service';
 
 @Component({
   selector: 'app-calculator',

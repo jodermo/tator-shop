@@ -6,9 +6,9 @@ import { ShopOverviewComponent } from './components/backend/shop-overview/shop-o
 import { ShopConfigurationComponent } from './components/backend/shop-configuration/shop-configuration.component';
 import { CashRegisterComponent } from './components/cash-register/cash-register.component';
 import { CalculatorComponent } from './components/calculator/calculator.component';
-import { TatorImportsModule } from '../../src/app/tator-imports.module';
-import { TatorDataComponentsModule } from '../tator-core/tator-data-components.module';
-import { TatorUiComponentsModule } from '../tator-core/tator-ui-components.module';
+import { TatorUiComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-ui-components.module';
+import { TatorImportsModule } from '../../tator-app/angular-app/src/app/tator-imports.module';
+import { TatorDataComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-data-components.module';
 
 @NgModule({
   declarations: [

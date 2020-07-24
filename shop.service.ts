@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ShopConfig } from '../../../config/shop.config';
 import { Product } from './api/product.entity';
 import { ProductCategory } from './api/product-category.entity';
 import { ProductGroup } from './api/product-group.entity';
@@ -9,8 +8,9 @@ import { Manufacturer } from './api/manufacturer.entity';
 import { Payment } from './api/payment.entity';
 import { Shipping } from './api/shipping.entity';
 import { Tax } from './api/tax.entity';
-import { AppService } from '../tator-core/services/app.service';
 import { Currency } from './api/currency.entity';
+import { ShopConfig } from '../../config/shop.config';
+import { AppService } from '../../tator-app/angular-app/modules/tator-core/services/app.service';
 
 
 export const ShopTables = [

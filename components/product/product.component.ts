@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Product } from '../../api/product.entity';
-import { AppService } from '../../../tator-core/services/app.service';
 import { ShopService } from '../../shop.service';
+import { AppService } from '../../../../tator-app/angular-app/modules/tator-core/services/app.service';
 
 @Component({
   selector: 'app-product',
