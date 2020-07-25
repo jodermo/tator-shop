@@ -8,6 +8,16 @@
     </div>
     <div class="article-content">
       <app-data-selection [tableName]="'product'" [data]="app.data.table('product')"
+                          [fieldOptions]="{
+        categoryId: {name: 'product_category', type: 'select', tableName: 'product-category'},
+        groupId: {name: 'product_group', type: 'select', tableName: 'product-group'},
+        manufacturerId: {name: 'manufacturer', type: 'select', tableName: 'manufacturer'},
+        currencyId: {name: 'currency', type: 'select', tableName: 'currency'},
+        discountId: {name: 'discount', type: 'select', tableName: 'discount'},
+        shippingIds: {name: 'shipping', type: 'select', tableName: 'shipping'},
+        taxId: {name: 'tax', type: 'select', tableName: 'tax'}
+      }"
+                          (onAddData)="addNewData($event)"
                           (onEntryEdit)="shop.currentProduct = $event;"></app-data-selection>
     </div>
   </div>

@@ -16,6 +16,7 @@ export class ProductOverviewComponent implements OnInit {
     }
 
     addNewData(data) {
+        console.log(data)
         if (data && data.name && data.name === 'product_category') {
             this.shop.newProductCategory();
         } else if (data && data.name && data.name === 'product_group') {
