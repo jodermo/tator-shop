@@ -3,11 +3,11 @@ import { ShopService } from '../../../shop.service';
 import { AppService } from '../../../../../tator-app/angular-app/modules/tator-core/services/app.service';
 
 @Component({
-    selector: 'app-product-overview',
-    templateUrl: './product-overview.component.html',
-    styleUrls: ['./product-overview.component.scss']
+    selector: 'app-manufacturer-overview',
+    templateUrl: './manufacturer-overview.component.html',
+    styleUrls: ['./manufacturer-overview.component.scss']
 })
-export class ProductOverviewComponent implements OnInit {
+export class ManufacturerOverviewComponent implements OnInit {
 
     constructor(public app: AppService, public shop: ShopService) {
     }
@@ -16,6 +16,7 @@ export class ProductOverviewComponent implements OnInit {
     }
 
     addNewData(data) {
+        console.log('addNewData', data);
         if (data && data.name && data.name === 'product_category') {
             this.shop.newProductCategory();
         } else if (data && data.name && data.name === 'product_group') {

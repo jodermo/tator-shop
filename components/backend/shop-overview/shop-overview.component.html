@@ -1,1 +1,39 @@
-<p>shop-overview works!</p>
+<div class="horizontal-flex">
+    <div class="article full flex-item">
+        <div class="article-title">
+            <span>{{app.text('overview', 'shop')}}</span>
+        </div>
+        <div class="article-content">
+            <div class="shop-products">
+                <div class="count product-count">
+                    {{app.data.table('product').length}}
+                </div>
+                <div class="count product-count" (click)="app.showPage('shop', 'products')">
+                    <b>{{app.text('products', 'shop')}}</b>
+                </div>
+            </div>
+            <div class="shop-manufacturer">
+                <div class="count product-count">
+                    {{app.data.table('manufacturer').length}}
+                </div>
+                <div class="count product-count" (click)="app.showPage('shop', 'manufacturer')">
+                    <b>{{app.text('manufacturer', 'shop')}}</b>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="popup-overlay layout-{{app.popupLayout}}" [ngClass]="{active:(false)}">
+    <div class="popup-container" *ngIf="false">
+        <div class="popup-header">
+
+        </div>
+        <div class="popup-content">
+
+        </div>
+        <div class="popup-footer">
+
+        </div>
+    </div>
+</div>

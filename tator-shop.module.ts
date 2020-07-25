@@ -9,33 +9,34 @@ import { CalculatorComponent } from './components/calculator/calculator.componen
 import { TatorUiComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-ui-components.module';
 import { TatorImportsModule } from '../../tator-app/angular-app/src/app/tator-imports.module';
 import { TatorDataComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-data-components.module';
+import { ManufacturerOverviewComponent } from './components/backend/manufacturer-overview/manufacturer-overview.component';
 
 @NgModule({
-  declarations: [
-    ProductComponent,
-    ProductOverviewComponent,
-    ShopConfigurationComponent,
-    ShopOverviewComponent,
-    CartComponent,
-    CashRegisterComponent,
-    CalculatorComponent
-  ],
-  imports: [
-    TatorImportsModule,
-    TatorDataComponentsModule,
-    TatorUiComponentsModule,
-  ],
-  providers: [
-
-  ],
-  exports: [
-    ProductComponent,
-    ProductOverviewComponent,
-    ShopConfigurationComponent,
-    ShopOverviewComponent,
-    CartComponent,
-    CashRegisterComponent
-  ]
+    declarations: [
+        ProductComponent,
+        ProductOverviewComponent,
+        ManufacturerOverviewComponent,
+        ShopConfigurationComponent,
+        ShopOverviewComponent,
+        CartComponent,
+        CashRegisterComponent,
+        CalculatorComponent
+    ],
+    imports: [
+        TatorImportsModule,
+        TatorDataComponentsModule,
+        TatorUiComponentsModule,
+    ],
+    providers: [],
+    exports: [
+        ProductComponent,
+        ProductOverviewComponent,
+        ManufacturerOverviewComponent,
+        ShopConfigurationComponent,
+        ShopOverviewComponent,
+        CartComponent,
+        CashRegisterComponent
+    ]
 })
 export class TatorShopModule {
 }
