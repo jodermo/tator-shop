@@ -4,28 +4,29 @@ import { ShopService } from '../../shop.service';
 import { AppService } from '../../../../tator-app/angular-app/modules/tator-core/services/app.service';
 
 @Component({
-  selector: 'app-product',
-  templateUrl: './product.component.html',
-  styleUrls: ['./product.component.css']
+    selector: 'app-product',
+    templateUrl: './product.component.html',
+    styleUrls: ['./product.component.css']
 })
 export class ProductComponent implements OnInit, OnChanges {
-  @Input() product: Product;
-  reload;
-  longDescription = false;
-  cart = true;
-  edit = true;
+    @Input() product: Product;
+    @Input() cart = true;
+    @Input() edit = true;
+    reload;
+    longDescription = false;
 
-  constructor(public app: AppService, public shop: ShopService) {
-  }
 
-  ngOnInit() {
-  }
+    constructor(public app: AppService, public shop: ShopService) {
+    }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.reload = true;
-    setTimeout(() => {
-      this.reload = false;
-    }, 0)
-  }
+    ngOnInit() {
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        this.reload = true;
+        setTimeout(() => {
+            this.reload = false;
+        }, 0)
+    }
 
 }

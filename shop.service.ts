@@ -45,7 +45,6 @@ export class ShopService {
     updating = false;
     ready = false;
 
-    products = [];
     cart: CartObject[] = [];
     previewProduct;
 
@@ -106,7 +105,7 @@ export class ShopService {
     filterValue: string;
 
     constructor(public app: AppService) {
-
+        this.init();
     }
 
     init() {
@@ -114,7 +113,6 @@ export class ShopService {
         this.getData(() => {
             this.loading = false;
             this.ready = true;
-            this.filterProducts();
         });
     }
 
@@ -754,34 +752,17 @@ export class ShopService {
         }
     }
 
-    filterMethodChange() {
-        if (this.filterMethod === 'product_category') {
-            if (this.app.data.table('product-category').length) {
-                this.filterValue = this.app.data.table('product-category')[0].id;
-            }
-        } else if (this.filterMethod === 'product_group') {
-            if (this.app.data.table('product-group').length) {
-                this.filterValue = this.app.data.table('product-group')[0].id;
-            }
-        } else {
-            this.filterValue = null;
-        }
-        this.filterProducts();
+    initSelection() {
+        this.currentProduct = null;
+        this.currentProductGroup = null;
+        this.currentProductCategory = null;
+        this.currentDiscount = null;
+        this.currentTax = null;
+        this.currentShipping = null;
+        this.currentCurrency = null;
+        this.currentPayment = null;
+        this.currentManufacturer = null;
+        this.currentOrder = null;
     }
-
-    filterProducts() {
-        if (this.filterMethod && this.filterValue) {
-            if (this.filterMethod === 'product_category') {
-                this.products = this.app.data.table('product').filter(product => product.categoryId === this.filterValue);
-                return;
-            } else if (this.filterMethod === 'product_group') {
-                this.products = this.app.data.table('product').filter(product => product.groupId === this.filterValue);
-                return;
-            }
-        }
-        this.products = this.app.data.table('product');
-        return;
-    }
-
 
 }

@@ -1,17 +1,83 @@
-<div class="horizontal-flex full-height">
-  <div class="article flex-item">
-    <div class="article-title">
-      <span>{{app.text('bills', 'backend')}}</span>
+<div class="horizontal-flex">
+    <div class="article mobile-article-small">
+        <div class="article-title">
+            <span>{{app.text('product_groups', 'shop')}}</span>
+        </div>
+        <div class="article-content">
+            <div class="list-selection">
+                <div class="list-item" (click)="selectedGroup = null; selectGroup()"
+                     [ngClass]="{active:(selectedGroup == null)}">
+                    {{app.text('all_groups', 'shop')}}
+                </div>
+                <div class="list-item" *ngFor="let group of app.data.table('product-group')"
+                     (click)="selectGroup(group)" (dblclick)="shop.initSelection(); shop.currentProductGroup = group;"
+                     [ngClass]="{active:(selectedGroup == group)}">
+                    <div><span> {{(group.name || group.id)}}</span></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="article-content">
+    <div class="article  mobile-article-small">
+        <div class="article-title">
+            <span>{{app.text('product_categories', 'shop')}}</span>
+        </div>
+        <div class="article-content">
+            <div class="list-selection">
+                <div class="list-item" (click)="selectedCategory = null; selectCategory()"
+                     [ngClass]="{active:(selectedCategory == null)}">
+                    {{app.text('all_categories', 'shop')}}
+                </div>
+                <div class="list-item" *ngFor="let category of app.data.table('product-category')"
+                     (click)="selectCategory(category)"
+                     (dblclick)="shop.initSelection(); shop.currentProductCategory = category;"
+                     [ngClass]="{active:(selectedCategory == category)}">
+                    <div><span>{{(category.name || category.id)}}</span></div>
+
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="article full">
-    <div class="article-title">
-      <span>{{app.text('cash_register', 'backend')}}</span>
+    <div class="article full flex-item">
+        <div class="article-title">
+            <span>{{app.text('products', 'shop')}}</span>
+          <div class="horizontal-flex flex-item flex-end">
+            <button class="edit-button" (click)="app.showPage('shop', 'products')">
+              {{app.text('edit', 'shop')}}
+            </button>
+          </div>
+        </div>
+        <div class="article-content" *ngIf="products && products.length">
+            <div class="product-list list-selection">
+                <div class="list-item product-list-item" *ngFor="let product of products">
+                    <div><span> {{(product.name || product.id)}}</span> <span> {{product.price}}</span></div>
+                    <button class="delete-button" (click)="removeProduct(product)">
+                        {{app.text('delete', 'shop')}}
+                    </button>
+                    <button class="add-button" (click)="addProduct(product)">
+                        {{app.text('add', 'shop')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="article-content" *ngIf="!products || !products.length">
+            <b><i>{{app.text('no_products_available_for_selection', 'shop')}}</i></b>
+        </div>
     </div>
-    <div class="article-content">
-      <app-calculator></app-calculator>
+</div>
+<div class="horizontal-flex">
+    <div class="article flex-item">
+        <div class="article-title">
+            <span>{{app.text('bills', 'backend')}}</span>
+        </div>
+        <div class="article-content">
+        </div>
     </div>
-  </div>
+    <div class="article full">
+        <div class="article-title">
+            <span>{{app.text('cash_register', 'backend')}}</span>
+        </div>
+        <div class="article-content">
+            <app-calculator></app-calculator>
+        </div>
+    </div>
 </div>

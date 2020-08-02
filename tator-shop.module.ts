@@ -10,6 +10,7 @@ import { TatorUiComponentsModule } from '../../tator-app/angular-app/modules/tat
 import { TatorImportsModule } from '../../tator-app/angular-app/src/app/tator-imports.module';
 import { TatorDataComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-data-components.module';
 import { ManufacturerOverviewComponent } from './components/backend/manufacturer-overview/manufacturer-overview.component';
+import { TatorFileComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-file-components.module';
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import { ManufacturerOverviewComponent } from './components/backend/manufacturer
     imports: [
         TatorImportsModule,
         TatorDataComponentsModule,
+        TatorFileComponentsModule,
         TatorUiComponentsModule,
     ],
     providers: [],

@@ -14,6 +14,9 @@ export class Product {
     @Column({nullable: true, default: null, length: 500})
     itemNumber: string;
 
+    @Column({nullable: true, default: null})
+    imageId: number;
+
     @Column({nullable: true, default: null, length: 30})
     type: string;
 

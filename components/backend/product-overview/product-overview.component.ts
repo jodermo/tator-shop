@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ShopService } from '../../../shop.service';
 import { AppService } from '../../../../../tator-app/angular-app/modules/tator-core/services/app.service';
+import { ProductGroup } from '../../../api/product-group.entity';
+import { Product } from '../../../api/product.entity';
 
 @Component({
     selector: 'app-product-overview',
@@ -8,11 +10,42 @@ import { AppService } from '../../../../../tator-app/angular-app/modules/tator-c
     styleUrls: ['./product-overview.component.scss']
 })
 export class ProductOverviewComponent implements OnInit {
+    selectedGroup: any = null;
+    selectedCategory: any = null;
+    productLayout = 'list';
+    showProduct: Product = null;
+
+    products: Product[];
 
     constructor(public app: AppService, public shop: ShopService) {
     }
 
     ngOnInit(): void {
+        this.filterProducts();
+    }
+
+    showProd(product) {
+        console.log('showProd', product);
+        this.showProduct = product;
+
+    }
+
+    filterProducts() {
+        this.products = this.app.data.table('product');
+        if (this.selectedCategory) {
+            console.log('filterProducts category', this.selectedCategory);
+            this.products = this.products.filter(product => {
+                return product.categoryId === this.selectedCategory.id;
+            });
+        }
+        if (this.selectedGroup) {
+            console.log('filterProducts group', this.selectedGroup);
+            this.products = this.products.filter(product => {
+                return product.groupId === this.selectedGroup.id;
+            });
+        }
+
+        console.log('filterProducts', this.products);
     }
 
     addNewData(data) {
@@ -37,5 +70,29 @@ export class ProductOverviewComponent implements OnInit {
 
 
     }
+
+    selectCategory(category: any = null) {
+
+        if (category) {
+            this.selectedCategory = category;
+        } else {
+            if (this.selectedCategory === 'new') {
+                this.shop.newProductCategory();
+            }
+        }
+        this.filterProducts();
+    }
+
+    selectGroup(group: any = null) {
+        if (group) {
+            this.selectedGroup = group;
+        } else {
+            if (this.selectedGroup === 'new') {
+                this.shop.newProductGroup();
+            }
+        }
+        this.filterProducts();
+    }
+
 
 }

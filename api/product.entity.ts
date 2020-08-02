@@ -8,6 +8,8 @@ export class Product {
 
   itemNumber: string = null;
 
+  imageId: number = null;
+
   type: string = 'default';
 
   price: number = null;
