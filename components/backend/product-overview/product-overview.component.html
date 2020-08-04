@@ -1,24 +1,25 @@
 <div class="horizontal-flex full-height">
     <div class="article full mobile-article-small">
         <div class="article-title">
-            <span>{{app.text('product_groups', 'shop')}}</span>
+            <span>{{app.text('product_types', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
-                <button class="new-button" (click)="shop.initSelection(); shop.newProductGroup()">
+                <button class="new-button" (click)="shop.initSelection(); shop.newProductType()">
                     {{app.text('new', 'shop')}}
                 </button>
             </div>
         </div>
         <div class="article-content">
             <div class="list-selection">
-                <div class="list-item" (click)="selectedGroup = null; selectGroup()"
-                     [ngClass]="{active:(selectedGroup == null)}">
-                    {{app.text('all_groups', 'shop')}}
+                <div class="list-item" (click)="selectedCategory = null; selectType()"
+                     [ngClass]="{active:(selectedCategory == null)}">
+                    {{app.text('all_types', 'shop')}}
                 </div>
-                <div class="list-item" *ngFor="let group of app.data.table('product-group')"
-                     (click)="selectGroup(group)" (dblclick)="shop.initSelection(); shop.currentProductGroup = group;"
-                     [ngClass]="{active:(selectedGroup == group)}">
-                    <div><span> {{(group.name || group.id)}}</span></div>
-                    <button class="delete-button" (click)="shop.removeProductGroup(group)">
+                <div class="list-item" *ngFor="let type of app.data.table('product-type')"
+                     (click)="selectType(type)"
+                     (dblclick)="shop.initSelection(); shop.currentProductType = type;"
+                     [ngClass]="{active:(selectedCategory == type)}">
+                    <div><span>{{(type.name || type.id)}}</span></div>
+                    <button class="delete-button" (click)="shop.removeProductType(type)">
                         {{app.text('delete', 'shop')}}
                     </button>
                 </div>
@@ -52,6 +53,32 @@
             </div>
         </div>
     </div>
+    <div class="article full mobile-article-small">
+        <div class="article-title">
+            <span>{{app.text('product_groups', 'shop')}}</span>
+            <div class="horizontal-flex flex-item flex-end">
+                <button class="new-button" (click)="shop.initSelection(); shop.newProductGroup()">
+                    {{app.text('new', 'shop')}}
+                </button>
+            </div>
+        </div>
+        <div class="article-content">
+            <div class="list-selection">
+                <div class="list-item" (click)="selectedGroup = null; selectGroup()"
+                     [ngClass]="{active:(selectedGroup == null)}">
+                    {{app.text('all_groups', 'shop')}}
+                </div>
+                <div class="list-item" *ngFor="let group of app.data.table('product-group')"
+                     (click)="selectGroup(group)" (dblclick)="shop.initSelection(); shop.currentProductGroup = group;"
+                     [ngClass]="{active:(selectedGroup == group)}">
+                    <div><span> {{(group.name || group.id)}}</span></div>
+                    <button class="delete-button" (click)="shop.removeProductGroup(group)">
+                        {{app.text('delete', 'shop')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="article full flex-item">
         <div class="article-title">
             <span>{{app.text('products', 'shop')}}</span>
@@ -72,15 +99,20 @@
         <div class="article-content" *ngIf="products && products.length && productLayout === 'list'">
             <app-data-selection [tableName]="'product'" [data]="products" [fixedData]="true"
                                 [fieldOptions]="{
+
+        typeId: {name: 'product_type', type: 'select', tableName: 'product-type'},
         categoryId: {name: 'product_category', type: 'select', tableName: 'product-category'},
-        groupId: {name: 'product_group', type: 'select', tableName: 'product-group'},
+        groupIds: {name: 'product_group', type: 'multi-select', tableName: 'product-group', nameKey: 'name'},
         manufacturerId: {name: 'manufacturer', type: 'select', tableName: 'manufacturer'},
         currencyId: {name: 'currency', type: 'select', tableName: 'currency'},
         discountId: {name: 'discount', type: 'select', tableName: 'discount'},
-        shippingIds: {name: 'shipping', type: 'select', tableName: 'shipping'},
-        taxId: {name: 'tax', type: 'select', tableName: 'tax'}
+        shippingIds: {name: 'shipping', type: 'multi-select', tableName: 'shipping', nameKey: 'name'},
+        taxId: {name: 'tax', type: 'select', tableName: 'tax'},
+        available: { type: 'checkbox'},
+        cashRegister: { type: 'checkbox'},
+        onlineShop: { type: 'checkbox'}
       }"
-                                [hiddenFields]="['id', 'type', 'taxId', 'discountId', 'currencyId', 'description', 'longDescription', 'shippingIds']"
+                                [hiddenFields]="['id', 'alias', 'type', 'itemNumber', 'taxId',  'onlineShop', 'discountId', 'manufacturerId', 'currencyId', 'description', 'longDescription', 'shippingIds']"
                                 [show]="showProduct"
                                 [edit]="shop.currentProduct"
                                 (onAddData)="addNewData($event)"
@@ -88,11 +120,7 @@
                                 (onEntryEdit)="shop.initSelection(); shop.currentProduct = $event;"></app-data-selection>
         </div>
         <div class="article-content" *ngIf="products && products.length && productLayout === 'products'">
-            <div class="product-list">
-                <app-product *ngFor="let product of products" [product]="product" [edit]="true"
-                             [cart]="false"></app-product>
-            </div>
-
+            <app-product-list [products]="products"></app-product-list>
         </div>
         <div class="article-content" *ngIf="!products || !products.length">
             <b><i>{{app.text('no_products_available_for_selection', 'shop')}}</i></b>
@@ -110,13 +138,17 @@
         </div>
         <div class="popup-content">
             <app-data-editor [data]="shop.currentProduct" [fieldOptions]="{
+        typeId: {name: 'product_type', type: 'select', tableName: 'product-type'},
         categoryId: {name: 'product_category', type: 'select', tableName: 'product-category'},
-        groupId: {name: 'product_group', type: 'select', tableName: 'product-group'},
+        groupIds: {name: 'product_group', type: 'multi-select', tableName: 'product-group', nameKey: 'name'},
         manufacturerId: {name: 'manufacturer', type: 'select', tableName: 'manufacturer'},
         currencyId: {name: 'currency', type: 'select', tableName: 'currency'},
         discountId: {name: 'discount', type: 'select', tableName: 'discount'},
-        shippingIds: {name: 'shipping', type: 'select', tableName: 'shipping'},
-        taxId: {name: 'tax', type: 'select', tableName: 'tax'}
+        shippingIds: {name: 'shipping', type: 'multi-select', tableName: 'shipping', nameKey: 'name'},
+        taxId: {name: 'tax', type: 'select', tableName: 'tax'},
+        available: { type: 'checkbox'},
+        cashRegister: { type: 'checkbox'},
+        onlineShop: { type: 'checkbox'}
       }"
                              (onAddData)="addNewData($event)"
             ></app-data-editor>
@@ -148,6 +180,28 @@
             <button class="edit-button"
                     (click)="shop.currentProduct = showProduct; showProduct = null;"
                     [ngClass]="{inactive:(shop.updating)}">{{app.text('edit', 'shop')}}
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="popup-overlay layout-{{app.popupLayout}}" [ngClass]="{active:(shop.currentProductType)}">
+    <div class="popup-container" *ngIf="shop.currentProductType">
+        <div class="popup-header">
+            <h3>{{app.text('product_type', 'shop')}}</h3>
+            <app-popup-options></app-popup-options>
+            <button class="close-button"
+                    (click)="shop.currentProductType = null; shop.newProductValue = false; selectedType = null;">
+                {{app.text('close', 'shop')}}
+            </button>
+        </div>
+        <div class="popup-content">
+            <app-data-editor [data]="shop.currentProductType"></app-data-editor>
+        </div>
+        <div class="popup-footer">
+            <button class="save-button"
+                    (click)="shop.updateOrAddProductType(shop.currentProductType); selectType(shop.currentProductType); shop.currentProductType = null; "
+                    [ngClass]="{inactive:(shop.updating)}">{{app.text('save', 'shop')}}
             </button>
         </div>
     </div>

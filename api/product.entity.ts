@@ -2,6 +2,8 @@ export class Product {
 
   id: number = null;
 
+  available: boolean = null;
+
   name: string = null;
 
   alias: string = null;
@@ -12,9 +14,15 @@ export class Product {
 
   type: string = 'default';
 
+  typeId: number = null;
+
   price: number = null;
 
   stock: number = null;
+
+  cashRegister: boolean = null;
+
+  onlineShop: boolean = null;
 
   manufacturerId: number = null;
 
@@ -22,19 +30,19 @@ export class Product {
 
   categoryId: number = null;
 
-  groupId: number = null;
+  groupIds: any = [];
 
   taxId: number = null;
 
   discountId: number = null;
 
-  shippingIds: any = null;
+  shippingIds: any = [];
 
   description: any = null;
 
   longDescription: any = null;
 
-  files: any = null;
+  files: any = [];
 
   attr: any = null;
 

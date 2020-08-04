@@ -1,0 +1,11 @@
+<div class="cash-register-barcode horizontal-flex full-height">
+    <div class="article full flex-item">
+        <div class="article-title">
+            <span>{{app.text('barcode_scanner', 'shop')}}</span>
+        </div>
+        <div class="article-content">
+            <app-barcode-scanner></app-barcode-scanner>
+            <app-barcode-data *ngIf="shop.barcodes" [data]="shop.barcodes"></app-barcode-data>
+        </div>
+    </div>
+</div>

@@ -11,6 +11,8 @@ import { Tax } from './api/tax.entity';
 import { Currency } from './api/currency.entity';
 import { ShopConfig } from '../../config/shop.config';
 import { AppService } from '../../tator-app/angular-app/modules/tator-core/services/app.service';
+import { ShopRegisterService } from './shop-register.service';
+import { ProductType } from './api/product-type.entity';
 
 
 export const ShopTables = [
@@ -24,7 +26,8 @@ export const ShopTables = [
     'product-group',
     'product-category',
     'product',
-    'order'
+    'order',
+    'checkout'
 ];
 
 
@@ -47,9 +50,11 @@ export class ShopService {
 
     cart: CartObject[] = [];
     previewProduct;
+    barcodes = [];
 
     currentOrder;
     currentProduct;
+    currentProductType;
     currentProductCategory;
     currentProductGroup;
     currentManufacturer;
@@ -61,6 +66,13 @@ export class ShopService {
 
     newProductValue = false;
 
+    defaultCurrency = {
+        name: 'Euro',
+        iso: 'EUR',
+        alias: 'euro',
+        symbol: '€',
+        rate: 1
+    } as Currency;
 
     productCategoryTypes = [
         'default'
@@ -104,16 +116,60 @@ export class ShopService {
     filterMethod = this.filterMethods[0];
     filterValue: string;
 
-    constructor(public app: AppService) {
-        this.init();
+    audioAssets = [
+        {name: 'cash_beep', source: 'assets/audios/beep.wav'},
+        {name: 'cash_register', source: 'assets/audios/cash_register.wav'},
+    ];
+
+    constructor(public app: AppService, public register: ShopRegisterService) {
+        this.init(() => {
+            register.init(this);
+        });
+
     }
 
-    init() {
+    loadAudioAssets() {
+        for (const audioAsset of this.audioAssets) {
+            this.app.createAssetAudio(audioAsset);
+        }
+    }
+
+    init(success: any = null) {
         this.loading = true;
         this.getData(() => {
             this.loading = false;
             this.ready = true;
+            if (success) {
+                success();
+            }
         });
+        this.app.websocket.onBarcode().subscribe(barcode => {
+            this.onReceiveBarcode(barcode);
+        });
+        this.loadAudioAssets();
+    }
+
+    onReceiveBarcode(barcode: any) {
+
+        if (barcode && barcode.userId && barcode.userId === this.app.user.id) {
+            this.barcodes.push(barcode);
+            if (barcode && barcode.data && barcode.data.codeResult) {
+                const code = barcode.data.codeResult.code;
+                let codeExist = false;
+                for (let product of this.app.data.table('product')) {
+                    product = product as Product;
+                    if (code === product.itemNumber) {
+                        codeExist = true;
+                        this.register.addProduct(product);
+                    }
+                }
+                if (!codeExist) {
+
+                }
+            }
+        }
+
+
     }
 
     getData(success: any = false) {
@@ -265,13 +321,84 @@ export class ShopService {
         }
     }
 
-    productPrice(price: number, tax: any = null, discount: any = null) {
+    productPrice(product: Product, amount = 1) {
+        let grossPrice = product.price * amount;
+        let netPrice = grossPrice;
+
+        let tax: any;
+        if (product.taxId) {
+            tax = this.app.data.byId('tax', product.taxId);
+        }
+        if (tax && tax.value) {
+            netPrice += (product.price * tax.value / 100)
+        }
+
+        let currency = this.defaultCurrency;
+        if (product.currencyId) {
+            currency = this.app.data.byId('currency', product.currencyId);
+        }
+
         return {
-            gross: price,
-            net: price,
-            tax: tax,
-            discount: discount,
+            price: product.price,
+            amount: grossPrice,
+            gross: grossPrice,
+            net: netPrice,
+            currency: currency,
+            tax: tax
         };
+    }
+
+    /* Product Types */
+
+    newProductType() {
+        this.newProductValue = true;
+        return this.currentProductType = new ProductType();
+    }
+
+    productTypeById(id: number) {
+        return this.app.data.byId('product-type', id);
+    }
+
+    addProductType(element: any, success: any = false) {
+        this.app.data.add('product-type', element, (e) => {
+            if (success) {
+                success(e)
+            }
+            this.newProductValue = false;
+        });
+    }
+
+    updateProductType(element: any, success: any = false) {
+        this.app.data.update('product-type', element['id'], element, success);
+    }
+
+    updateOrAddProductType(category: any) {
+        this.updating = true;
+        if (category['id']) {
+            this.updateProductType(category, () => {
+                this.currentProductType = null;
+                this.updating = false;
+            });
+        } else {
+            this.addProductType(category, () => {
+                this.currentProductType = null;
+                this.updating = false;
+            });
+        }
+    }
+
+    removeProductType(element: any, success: any = false) {
+        return this.removeProductCategoryById(element.id, success);
+    }
+
+    removeProductTypeById(id: number, success: any = false) {
+        if (confirm(this.app.text('confirm_action'))) {
+            this.app.data.delete('product-type', id, success);
+        } else {
+            if (success) {
+                success(false);
+            }
+        }
     }
 
     /* Product Categories */

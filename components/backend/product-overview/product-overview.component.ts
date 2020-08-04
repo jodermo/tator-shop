@@ -10,6 +10,7 @@ import { Product } from '../../../api/product.entity';
     styleUrls: ['./product-overview.component.scss']
 })
 export class ProductOverviewComponent implements OnInit {
+    selectedType: any = null;
     selectedGroup: any = null;
     selectedCategory: any = null;
     productLayout = 'list';
@@ -24,32 +25,46 @@ export class ProductOverviewComponent implements OnInit {
         this.filterProducts();
     }
 
-    showProd(product) {
-        console.log('showProd', product);
+    showProd(product, e: any = null) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         this.showProduct = product;
+    }
 
+    getProducts() {
+        this.products = this.app.data.table('product');
     }
 
     filterProducts() {
-        this.products = this.app.data.table('product');
+        this.getProducts();
+
+        if (this.selectedType) {
+            this.products = this.products.filter(product => {
+                return product.typeId === this.selectedType.id;
+            });
+        }
         if (this.selectedCategory) {
-            console.log('filterProducts category', this.selectedCategory);
             this.products = this.products.filter(product => {
                 return product.categoryId === this.selectedCategory.id;
             });
         }
         if (this.selectedGroup) {
-            console.log('filterProducts group', this.selectedGroup);
             this.products = this.products.filter(product => {
-                return product.groupId === this.selectedGroup.id;
+                if (product.groupIds) {
+                    for (const id of product.groupIds) {
+                        if (id === this.selectedGroup.id) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
             });
         }
-
-        console.log('filterProducts', this.products);
     }
 
     addNewData(data) {
-        console.log(data)
         if (data && data.name && data.name === 'product_category') {
             this.shop.newProductCategory();
         } else if (data && data.name && data.name === 'product_group') {
@@ -89,6 +104,17 @@ export class ProductOverviewComponent implements OnInit {
         } else {
             if (this.selectedGroup === 'new') {
                 this.shop.newProductGroup();
+            }
+        }
+        this.filterProducts();
+    }
+
+    selectType(type: any = null) {
+        if (type) {
+            this.selectedType = type;
+        } else {
+            if (this.selectedType === 'new') {
+                this.shop.newProductType();
             }
         }
         this.filterProducts();

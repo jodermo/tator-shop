@@ -7,9 +7,6 @@ export const ShopBackend: BackendPage = {
     categories: [
         {alias: 'overview'},
         {alias: 'products'},
-        {alias: 'orders'},
-        {alias: 'shipping'},
-        {alias: 'manufacturer'},
         {alias: 'configuration'},
     ]
 } as BackendPage;
@@ -20,5 +17,21 @@ export const CashRegisterBackend: BackendPage = {
     restriction: 'admin',
     categories: [
         {alias: 'cash_register'},
-    ],
+        {alias: 'checkout_overview'}
+    ]
 } as BackendPage;
+
+export const BarcodeBackend: BackendPage = {
+    alias: 'barcode',
+    icon: 'barcode',
+    restriction: 'admin'
+} as BackendPage;
+
+
+export const ShopDatabaseConfig = {
+    jsonFields: [
+        'groupIds',
+        'shippingIds',
+    ],
+    jsonTableFields: {},
+};

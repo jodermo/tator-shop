@@ -1,0 +1,4 @@
+<div class="product-list" *ngIf="products">
+    <app-product *ngFor="let product of products" [product]="product" [edit]="true"
+                 [cart]="false"></app-product>
+</div>

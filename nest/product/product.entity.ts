@@ -5,6 +5,9 @@ export class Product {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({nullable: true, default: null})
+    available: boolean = false;
+
     @Column({nullable: true, default: null, length: 500})
     name: string;
 
@@ -21,10 +24,19 @@ export class Product {
     type: string;
 
     @Column({nullable: true, default: null})
+    typeId: number;
+
+    @Column({nullable: true, default: null})
     price: number;
 
     @Column({nullable: true, default: null})
     stock: number;
+
+    @Column({nullable: true, default: null})
+    cashRegister: boolean = false;
+
+    @Column({nullable: true, default: null})
+    onlineShop: boolean = false;
 
     @Column({nullable: true, default: null})
     manufacturerId: number;
@@ -35,8 +47,8 @@ export class Product {
     @Column({nullable: true, default: null})
     categoryId: number;
 
-    @Column({nullable: true, default: null})
-    groupId: number;
+    @Column({type: 'text', nullable: true, default: null})
+    groupIds: any;
 
     @Column({nullable: true, default: null})
     taxId: number;

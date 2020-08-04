@@ -1,6 +1,7 @@
 <div class="product">
     <div class="product-header">
         <h3 *ngIf="product.name">{{product.name}}</h3>
+
     </div>
     <div class="product-content">
         <div class="product-image" *ngIf="product.imageId">
@@ -16,6 +17,10 @@
             <button class="more-button" (click)="longDescription = !longDescription"
                     [ngClass]="{active:(longDescription)}">{{app.text('read_more', 'shop')}}</button>
             <p *ngIf="longDescription">{{product.longDescription}}</p>
+        </div>
+        <div class="product-barcode" *ngIf="barcode">
+            <app-barcode-generator *ngIf="product.itemNumber" [code]="product.itemNumber"
+                                   [download]="true"></app-barcode-generator>
         </div>
     </div>
     <div class="product-footer">

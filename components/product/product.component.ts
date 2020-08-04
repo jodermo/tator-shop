@@ -6,12 +6,13 @@ import { AppService } from '../../../../tator-app/angular-app/modules/tator-core
 @Component({
     selector: 'app-product',
     templateUrl: './product.component.html',
-    styleUrls: ['./product.component.css']
+    styleUrls: ['./product.component.scss']
 })
 export class ProductComponent implements OnInit, OnChanges {
     @Input() product: Product;
     @Input() cart = true;
     @Input() edit = true;
+    @Input() barcode = true;
     reload;
     longDescription = false;
 

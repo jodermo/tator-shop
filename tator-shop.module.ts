@@ -9,18 +9,26 @@ import { CalculatorComponent } from './components/calculator/calculator.componen
 import { TatorUiComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-ui-components.module';
 import { TatorImportsModule } from '../../tator-app/angular-app/src/app/tator-imports.module';
 import { TatorDataComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-data-components.module';
-import { ManufacturerOverviewComponent } from './components/backend/manufacturer-overview/manufacturer-overview.component';
 import { TatorFileComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-file-components.module';
+import { ProductListComponent } from './components/product-list/product-list.component';
+import { CheckoutOverviewComponent } from './components/backend/checkout-overview/checkout-overview.component';
+import { CheckoutDataComponent } from './components/backend/checkout-data/checkout-data.component';
+import { TatorUserComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-user-components.module';
+import { TatorFormComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-form-components.module';
+import { CashRegisterBarcodeComponent } from './components/cash-register/cach-register-barcode/cash-register-barcode.component';
 
 @NgModule({
     declarations: [
+        ProductListComponent,
         ProductComponent,
         ProductOverviewComponent,
-        ManufacturerOverviewComponent,
+        CheckoutOverviewComponent,
+        CheckoutDataComponent,
         ShopConfigurationComponent,
         ShopOverviewComponent,
         CartComponent,
         CashRegisterComponent,
+        CashRegisterBarcodeComponent,
         CalculatorComponent
     ],
     imports: [
@@ -28,16 +36,21 @@ import { TatorFileComponentsModule } from '../../tator-app/angular-app/modules/t
         TatorDataComponentsModule,
         TatorFileComponentsModule,
         TatorUiComponentsModule,
+        TatorFormComponentsModule,
+        TatorUserComponentsModule,
     ],
     providers: [],
     exports: [
+        ProductListComponent,
         ProductComponent,
         ProductOverviewComponent,
-        ManufacturerOverviewComponent,
+        CheckoutOverviewComponent,
+        CheckoutDataComponent,
         ShopConfigurationComponent,
         ShopOverviewComponent,
         CartComponent,
-        CashRegisterComponent
+        CashRegisterComponent,
+        CashRegisterBarcodeComponent,
     ]
 })
 export class TatorShopModule {
