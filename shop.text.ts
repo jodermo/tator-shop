@@ -50,4 +50,5 @@ export let ShopText = [
     {alias: 'total', en: 'Total', de: 'Total'},
     {alias: 'seller', en: 'Seller', de: 'Verkäufer'},
     {alias: 'customer', en: 'Customer', de: 'Kunde'},
+    {alias: 'back_to_cash_register', en: 'Back to cash register', de: 'Zurück zur Kasse'},
 ];

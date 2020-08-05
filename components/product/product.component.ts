@@ -13,6 +13,8 @@ export class ProductComponent implements OnInit, OnChanges {
     @Input() cart = true;
     @Input() edit = true;
     @Input() barcode = true;
+    @Input() layout = 'default';
+
     reload;
     longDescription = false;
 

@@ -2,10 +2,9 @@ import { BackendPage } from '../../tator-app/angular-app/modules/tator-core/clas
 
 export const ShopBackend: BackendPage = {
     alias: 'shop',
-    icon: 'shop',
+    icon: 'shop-config',
     restriction: 'admin',
     categories: [
-        {alias: 'overview'},
         {alias: 'products'},
         {alias: 'configuration'},
     ]

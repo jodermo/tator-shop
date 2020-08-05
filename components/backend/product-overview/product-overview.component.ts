@@ -14,7 +14,6 @@ export class ProductOverviewComponent implements OnInit {
     selectedGroup: any = null;
     selectedCategory: any = null;
     productLayout = 'list';
-    showProduct: Product = null;
 
     products: Product[];
 
@@ -30,7 +29,7 @@ export class ProductOverviewComponent implements OnInit {
             e.preventDefault();
             e.stopPropagation();
         }
-        this.showProduct = product;
+        this.shop.previewProduct = product;
     }
 
     getProducts() {

@@ -19,6 +19,11 @@ $product_footer_height: $article_title_height;
 $product_image_width: $thumbnail_width;
 $product_image_height: $thumbnail_height;
 
+$product_small_image_width: $product_image_width/4;
+$product_small_image_height: $thumbnail_height/4;
+
+$register_item_width: 33.33%;
+
 
 .product {
   background: $product_background;
@@ -32,6 +37,11 @@ $product_image_height: $thumbnail_height;
 
   width: 100%;
   max-width: $product_width;
+
+  &.layout-full {
+    max-width: 100%;
+    min-height: 100%;
+  }
 
   a, p, h1, h2, h3, h4 {
     color: $product_color;
@@ -111,6 +121,7 @@ $product_image_height: $thumbnail_height;
   }
 }
 
+
 .product-list {
   display: flex;
   flex-wrap: wrap;
@@ -120,14 +131,42 @@ $product_image_height: $thumbnail_height;
   }
 }
 
-.list-selection {
+.product-list {
   .list-item.product-list-item, &.product-list-item * {
+    display: block;
     width: 100%;
     text-transform: none;
 
     span {
       margin-right: $gap_medium;
     }
+
+    .product-image {
+      display: inline-block;
+      max-width: $product_small_image_width;
+      max-height: $product_small_image_height;
+
+    }
+
+    .product-data {
+      display: inline-block;
+      width: 100%;
+      line-height: $navigation_height;
+
+      button {
+        float: left;
+      }
+
+    }
+  }
+}
+
+.list-selection {
+  .list-item.product-list-item {
+
+    max-width: $register_item_width;
+
+
   }
 }
 
@@ -135,8 +174,8 @@ $product_image_height: $thumbnail_height;
   position: absolute;
   width: 100%;
   height: 100%;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
 
   .article {
     background: $product_background;

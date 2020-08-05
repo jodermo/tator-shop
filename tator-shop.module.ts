@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { ProductComponent } from './components/product/product.component';
 import { ProductOverviewComponent } from './components/backend/product-overview/product-overview.component';
 import { CartComponent } from './components/cart/cart.component';
-import { ShopOverviewComponent } from './components/backend/shop-overview/shop-overview.component';
 import { ShopConfigurationComponent } from './components/backend/shop-configuration/shop-configuration.component';
 import { CashRegisterComponent } from './components/cash-register/cash-register.component';
 import { CalculatorComponent } from './components/calculator/calculator.component';
@@ -25,7 +24,6 @@ import { CashRegisterBarcodeComponent } from './components/cash-register/cach-re
         CheckoutOverviewComponent,
         CheckoutDataComponent,
         ShopConfigurationComponent,
-        ShopOverviewComponent,
         CartComponent,
         CashRegisterComponent,
         CashRegisterBarcodeComponent,
@@ -47,7 +45,6 @@ import { CashRegisterBarcodeComponent } from './components/cash-register/cach-re
         CheckoutOverviewComponent,
         CheckoutDataComponent,
         ShopConfigurationComponent,
-        ShopOverviewComponent,
         CartComponent,
         CashRegisterComponent,
         CashRegisterBarcodeComponent,

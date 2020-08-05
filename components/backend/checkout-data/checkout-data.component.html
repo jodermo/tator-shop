@@ -1,7 +1,16 @@
 <div class="horizontal-flex full-height">
     <div class="article full flex-item">
         <div class="article-title">
-            <span>{{app.text('checkout_overview', 'shop')}}</span>
+            <div class="horizontal-flex flex-item">
+
+                <button (click)="app.showPage('cash', 'cash_register');">
+                    <div class="horizontal-flex">
+                        <div class="icon-cash-register"></div>
+                        <div class="flex-item">{{app.text('back_to_cash_register', 'shop')}}</div>
+                    </div>
+                </button>
+            </div>
+
             <div class="horizontal-flex flex-item">
                 <label *ngIf="userSelection">
                     <select [(ngModel)]="userId" (change)="getResultData()">
@@ -51,7 +60,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let checkout of resultData">
+                <tr *ngFor="let checkout of resultData"
+                    [ngClass]="{active: (shop.lastCheckout && shop.lastCheckout.id === checkout.id)}">
                     <th>
                         {{app.date(checkout.date).full}}
                     </th>

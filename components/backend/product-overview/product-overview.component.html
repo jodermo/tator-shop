@@ -113,7 +113,7 @@
         onlineShop: { type: 'checkbox'}
       }"
                                 [hiddenFields]="['id', 'alias', 'type', 'itemNumber', 'taxId',  'onlineShop', 'discountId', 'manufacturerId', 'currencyId', 'description', 'longDescription', 'shippingIds']"
-                                [show]="showProduct"
+                                [show]="shop.previewProduct"
                                 [edit]="shop.currentProduct"
                                 (onAddData)="addNewData($event)"
                                 (onEntryShow)="shop.initSelection(); showProd($event)"
@@ -163,22 +163,22 @@
 </div>
 
 <div class="popup-overlay layout-{{app.popupLayout}}"
-     [ngClass]="{active:(showProduct)}">
-    <div class="popup-container" *ngIf="showProduct">
+     [ngClass]="{active:(shop.previewProduct)}">
+    <div class="popup-container" *ngIf="shop.previewProduct">
         <div class="popup-header">
             <h3>{{app.text('product', 'shop')}}</h3>
             <app-popup-options></app-popup-options>
-            <button class="close-button" (click)="showProduct = null">
+            <button class="close-button" (click)="shop.previewProduct = null">
                 {{app.text('close', 'shop')}}
             </button>
         </div>
         <div class="popup-content">
-            <app-product [product]="showProduct" [edit]="true"
+            <app-product [layout]="'full'" [product]="shop.previewProduct" [edit]="true"
                          [cart]="false"></app-product>
         </div>
         <div class="popup-footer">
             <button class="edit-button"
-                    (click)="shop.currentProduct = showProduct; showProduct = null;"
+                    (click)="shop.currentProduct = shop.previewProduct; shop.previewProduct = null;"
                     [ngClass]="{inactive:(shop.updating)}">{{app.text('edit', 'shop')}}
             </button>
         </div>

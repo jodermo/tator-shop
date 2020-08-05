@@ -13,6 +13,7 @@ import { ShopConfig } from '../../config/shop.config';
 import { AppService } from '../../tator-app/angular-app/modules/tator-core/services/app.service';
 import { ShopRegisterService } from './shop-register.service';
 import { ProductType } from './api/product-type.entity';
+import { Checkout } from './api/checkout.entity';
 
 
 export const ShopTables = [
@@ -63,6 +64,13 @@ export class ShopService {
     currentShipping;
     currentCurrency;
     currentTax;
+
+    localSettings: any = {
+        receiveBarcode: false,
+        showRegisterProduct: true
+    };
+
+    lastCheckout: Checkout;
 
     newProductValue = false;
 
@@ -116,11 +124,6 @@ export class ShopService {
     filterMethod = this.filterMethods[0];
     filterValue: string;
 
-    audioAssets = [
-        {name: 'cash_beep', source: 'assets/audios/beep.wav'},
-        {name: 'cash_register', source: 'assets/audios/cash_register.wav'},
-    ];
-
     constructor(public app: AppService, public register: ShopRegisterService) {
         this.init(() => {
             register.init(this);
@@ -128,14 +131,25 @@ export class ShopService {
 
     }
 
-    loadAudioAssets() {
-        for (const audioAsset of this.audioAssets) {
-            this.app.createAssetAudio(audioAsset);
+    saveLocalSettings() {
+        localStorage.setItem('local-shop-settings', JSON.stringify(this.localSettings));
+    }
+
+    loadLocalSettings() {
+        const storage = localStorage.getItem('local-shop-settings');
+        if (storage) {
+            this.localSettings = JSON.parse(storage)
         }
+    }
+
+    setLocalSettings(name: string, value: any) {
+        this.localSettings[name] = value;
+        this.saveLocalSettings();
     }
 
     init(success: any = null) {
         this.loading = true;
+        this.loadLocalSettings();
         this.getData(() => {
             this.loading = false;
             this.ready = true;
@@ -146,30 +160,45 @@ export class ShopService {
         this.app.websocket.onBarcode().subscribe(barcode => {
             this.onReceiveBarcode(barcode);
         });
-        this.loadAudioAssets();
+    }
+
+    onDetectBarcode(barcode: any) {
+        if (barcode && barcode.data && barcode.data.codeResult) {
+            const code = barcode.data.codeResult.code;
+            let productExist = false;
+            for (let product of this.app.data.table('product')) {
+                product = product as Product;
+                productExist = true;
+                if (code === product.itemNumber) {
+                    this.previewProduct = product;
+                }
+            }
+            if (!productExist && this.localSettings.receiveBarcode) {
+                this.app.showPage('barcode');
+            }
+        }
     }
 
     onReceiveBarcode(barcode: any) {
-
-        if (barcode && barcode.userId && barcode.userId === this.app.user.id) {
-            this.barcodes.push(barcode);
-            if (barcode && barcode.data && barcode.data.codeResult) {
-                const code = barcode.data.codeResult.code;
-                let codeExist = false;
-                for (let product of this.app.data.table('product')) {
-                    product = product as Product;
-                    if (code === product.itemNumber) {
-                        codeExist = true;
-                        this.register.addProduct(product);
+        if (this.localSettings.receiveBarcode) {
+            if (barcode && barcode.userId && barcode.userId === this.app.user.id) {
+                this.barcodes.push(barcode);
+                if (barcode && barcode.data && barcode.data.codeResult) {
+                    const code = barcode.data.codeResult.code;
+                    let codeExist = false;
+                    for (let product of this.app.data.table('product')) {
+                        product = product as Product;
+                        if (code === product.itemNumber) {
+                            codeExist = true;
+                            this.register.addProduct(product);
+                        }
                     }
-                }
-                if (!codeExist) {
+                    if (!codeExist) {
 
+                    }
                 }
             }
         }
-
-
     }
 
     getData(success: any = false) {
@@ -235,6 +264,13 @@ export class ShopService {
     }
 
     /* Products */
+
+    showProduct(product: Product, page = 'shop', category = 'products') {
+        if (page) {
+            this.app.showPage(page, category || null);
+        }
+        this.previewProduct = product;
+    }
 
     newProduct() {
         this.currentProduct = new Product();
@@ -324,7 +360,6 @@ export class ShopService {
     productPrice(product: Product, amount = 1) {
         let grossPrice = product.price * amount;
         let netPrice = grossPrice;
-
         let tax: any;
         if (product.taxId) {
             tax = this.app.data.byId('tax', product.taxId);
@@ -332,12 +367,10 @@ export class ShopService {
         if (tax && tax.value) {
             netPrice += (product.price * tax.value / 100)
         }
-
         let currency = this.defaultCurrency;
         if (product.currencyId) {
             currency = this.app.data.byId('currency', product.currencyId);
         }
-
         return {
             price: product.price,
             amount: grossPrice,

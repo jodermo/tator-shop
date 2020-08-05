@@ -49,23 +49,31 @@ export class ShopRegisterService {
         this.total.net = netPrice;
     }
 
-
+    clearProducts() {
+        this.productAmount = {};
+        this.registerProducts = [];
+        this.update();
+    }
 
 
     addProduct(product: Product) {
+        this.checkoutData = null;
         if (!this.productAmount[product.id]) {
             this.productAmount[product.id] = 1;
         } else {
             this.productAmount[product.id]++;
         }
         this.update();
-        this.app.playAudio('cash_beep');
+        this.app.popupLayout = 'right';
+        this.shop.showProduct(product, 'cash', 'cash_register');
+        this.app.playAudio('scanner');
     }
 
     removeProduct(product: Product) {
         if (this.productAmount[product.id] && this.productAmount[product.id] > 0) {
             this.productAmount[product.id]--;
         }
+        this.app.playAudio('remove');
         this.update();
     }
 
@@ -76,16 +84,23 @@ export class ShopRegisterService {
     }
 
     checkout() {
+        this.shop.previewProduct = null;
         this.checkoutData = new Checkout();
     }
 
     confirmCheckout(payment: Payment) {
         if (confirm(this.app.text('confirm_action'))) {
-            this.addNewCheckout(payment, () => {
-                this.app.playAudio('cash_register');
-                this.app.showPage('cash', 'checkout_overview')
+            this.addNewCheckout(payment, (result) => {
+                this.checkoutDone(result as Checkout);
             });
         }
+    }
+
+    checkoutDone(checkout: Checkout) {
+        this.shop.lastCheckout = checkout;
+        this.app.playAudio('cash');
+        this.app.showPage('cash', 'checkout_overview');
+        this.clearProducts();
     }
 
     addNewCheckout(payment: Payment, success: any = null) {
