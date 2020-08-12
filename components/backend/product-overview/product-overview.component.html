@@ -1,16 +1,24 @@
-<div class="horizontal-flex full-height">
-    <div class="article full mobile-article-small">
+<div class="horizontal-flex full-height" *ngIf="shop.ready && !shop.loading">
+    <app-mobile-navigation class="full-width" [items]="[
+    {name: 'product_types' ,  visible:true},
+    {name: 'product_categories' ,  visible:true},
+    {name: 'product_groups' , visible:true}
+    ]"></app-mobile-navigation>
+    <div class="article full mobile-tab-content"
+         [ngClass]="{'mobile-active':(app.currentMobileTab === 'product_types')}">
         <div class="article-title">
             <span>{{app.text('product_types', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
                 <button class="new-button" (click)="shop.initSelection(); shop.newProductType()">
                     {{app.text('new', 'shop')}}
                 </button>
+                <app-mobile-navigation [closeButton]="true"></app-mobile-navigation>
             </div>
         </div>
         <div class="article-content">
             <div class="list-selection">
-                <div class="list-item" (click)="selectedCategory = null; selectType()"
+                <div class="list-item" *ngIf="app.data.table('product-type').length"
+                     (click)="selectedCategory = null; selectType()"
                      [ngClass]="{active:(selectedCategory == null)}">
                     {{app.text('all_types', 'shop')}}
                 </div>
@@ -26,18 +34,21 @@
             </div>
         </div>
     </div>
-    <div class="article full mobile-article-small">
+    <div class="article full mobile-tab-content"
+         [ngClass]="{'mobile-active':(app.currentMobileTab === 'product_categories')}">
         <div class="article-title">
             <span>{{app.text('product_categories', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
                 <button class="new-button" (click)="shop.initSelection(); shop.newProductCategory()">
                     {{app.text('new', 'shop')}}
                 </button>
+                <app-mobile-navigation [closeButton]="true"></app-mobile-navigation>
             </div>
         </div>
         <div class="article-content">
             <div class="list-selection">
-                <div class="list-item" (click)="selectedCategory = null; selectCategory()"
+                <div class="list-item" *ngIf="app.data.table('product-category').length"
+                     (click)="selectedCategory = null; selectCategory()"
                      [ngClass]="{active:(selectedCategory == null)}">
                     {{app.text('all_categories', 'shop')}}
                 </div>
@@ -53,18 +64,21 @@
             </div>
         </div>
     </div>
-    <div class="article full mobile-article-small">
+    <div class="article full mobile-tab-content"
+         [ngClass]="{'mobile-active':(app.currentMobileTab === 'product_groups')}">
         <div class="article-title">
             <span>{{app.text('product_groups', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
                 <button class="new-button" (click)="shop.initSelection(); shop.newProductGroup()">
                     {{app.text('new', 'shop')}}
                 </button>
+                <app-mobile-navigation [closeButton]="true"></app-mobile-navigation>
             </div>
         </div>
         <div class="article-content">
             <div class="list-selection">
-                <div class="list-item" (click)="selectedGroup = null; selectGroup()"
+                <div class="list-item" *ngIf="app.data.table('product-group').length"
+                     (click)="selectedGroup = null; selectGroup()"
                      [ngClass]="{active:(selectedGroup == null)}">
                     {{app.text('all_groups', 'shop')}}
                 </div>
@@ -97,7 +111,8 @@
             </div>
         </div>
         <div class="article-content" *ngIf="products && products.length && productLayout === 'list'">
-            <app-data-selection [tableName]="'product'" [data]="products" [fixedData]="true"
+            <app-data-selection [fileCategory]="'shop-product'" [tableName]="'product'" [data]="products"
+                                [fixedData]="true"
                                 [fieldOptions]="{
 
         typeId: {name: 'product_type', type: 'select', tableName: 'product-type'},
@@ -112,12 +127,14 @@
         cashRegister: { type: 'checkbox'},
         onlineShop: { type: 'checkbox'}
       }"
-                                [hiddenFields]="['id', 'alias', 'type', 'itemNumber', 'taxId',  'onlineShop', 'discountId', 'manufacturerId', 'currencyId', 'description', 'longDescription', 'shippingIds']"
-                                [show]="shop.previewProduct"
+                                [hiddenFields]="['id', 'alias', 'type', 'itemNumber', 'taxId',  'discountId', 'manufacturerId', 'currencyId', 'description', 'longDescription', 'shippingIds']"
+                                [show]="app.currentElement"
                                 [edit]="shop.currentProduct"
                                 (onAddData)="addNewData($event)"
                                 (onEntryShow)="shop.initSelection(); showProd($event)"
-                                (onEntryEdit)="shop.initSelection(); shop.currentProduct = $event;"></app-data-selection>
+                                (onEntryEdit)="shop.initSelection(); shop.currentProduct = $event;"
+
+            ></app-data-selection>
         </div>
         <div class="article-content" *ngIf="products && products.length && productLayout === 'products'">
             <app-product-list [products]="products"></app-product-list>
@@ -137,7 +154,7 @@
             <button class="close-button" (click)="shop.currentProduct = null"></button>
         </div>
         <div class="popup-content">
-            <app-data-editor [data]="shop.currentProduct" [fieldOptions]="{
+            <app-data-editor [autoSave]="true" [data]="shop.currentProduct" [fieldOptions]="{
         typeId: {name: 'product_type', type: 'select', tableName: 'product-type'},
         categoryId: {name: 'product_category', type: 'select', tableName: 'product-category'},
         groupIds: {name: 'product_group', type: 'multi-select', tableName: 'product-group', nameKey: 'name'},
@@ -163,22 +180,22 @@
 </div>
 
 <div class="popup-overlay layout-{{app.popupLayout}}"
-     [ngClass]="{active:(shop.previewProduct)}">
-    <div class="popup-container" *ngIf="shop.previewProduct">
+     [ngClass]="{active:(app.currentElement)}">
+    <div class="popup-container" *ngIf="app.currentElement">
         <div class="popup-header">
             <h3>{{app.text('product', 'shop')}}</h3>
             <app-popup-options></app-popup-options>
-            <button class="close-button" (click)="shop.previewProduct = null">
+            <button class="close-button" (click)="app.currentElement = null">
                 {{app.text('close', 'shop')}}
             </button>
         </div>
         <div class="popup-content">
-            <app-product [layout]="'full'" [product]="shop.previewProduct" [edit]="true"
+            <app-product [layout]="'full'" [product]="app.currentElement" [edit]="true"
                          [cart]="false"></app-product>
         </div>
         <div class="popup-footer">
             <button class="edit-button"
-                    (click)="shop.currentProduct = shop.previewProduct; shop.previewProduct = null;"
+                    (click)="shop.currentProduct = app.currentElement; app.currentElement = null;"
                     [ngClass]="{inactive:(shop.updating)}">{{app.text('edit', 'shop')}}
             </button>
         </div>
@@ -196,7 +213,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [data]="shop.currentProductType"></app-data-editor>
+            <app-data-editor [autoSave]="true" [data]="shop.currentProductType"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -218,7 +235,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [data]="shop.currentProductCategory"></app-data-editor>
+            <app-data-editor [autoSave]="true" [data]="shop.currentProductCategory"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -240,7 +257,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [data]="shop.currentProductGroup"></app-data-editor>
+            <app-data-editor [autoSave]="true" [data]="shop.currentProductGroup"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -262,7 +279,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [data]="shop.currentManufacturer"></app-data-editor>
+            <app-data-editor [autoSave]="true" [data]="shop.currentManufacturer"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -284,7 +301,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [data]="shop.currentCurrency"></app-data-editor>
+            <app-data-editor [autoSave]="true" [data]="shop.currentCurrency"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -305,7 +322,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [data]="shop.currentPayment"></app-data-editor>
+            <app-data-editor [autoSave]="true" [data]="shop.currentPayment"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -326,7 +343,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [data]="shop.currentShipping"></app-data-editor>
+            <app-data-editor [autoSave]="true" [data]="shop.currentShipping"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -345,7 +362,7 @@
             <button class="close-button" (click)="shop.currentTax = null; shop.newProductValue = false;"></button>
         </div>
         <div class="popup-content">
-            <app-data-editor [data]="shop.currentTax"></app-data-editor>
+            <app-data-editor [autoSave]="true" [data]="shop.currentTax"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -364,7 +381,7 @@
             <button class="close-button" (click)="shop.currentDiscount = null; shop.newProductValue = false;"></button>
         </div>
         <div class="popup-content">
-            <app-data-editor [data]="shop.currentDiscount"></app-data-editor>
+            <app-data-editor [autoSave]="true" [data]="shop.currentDiscount"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"

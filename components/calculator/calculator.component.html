@@ -6,18 +6,18 @@
     <button (click)="clearHistory()" [ngClass]="{inactive:(!history.length)}">
       <span>clear history</span>
     </button>
-    <div class="calculator-last-calculation calculator-display">
-      <div *ngIf="lastOperation" class="calculator-input">
-        <p>{{lastOperation.output}}</p>
-      </div>
-      <div *ngIf="lastOperation" class="calculator-result" (click)="copyToClipboard(lastOperation.result)">
-        <p>= <b>{{lastOperation.result}}</b></p>
-      </div>
-    </div>
     <button (click)="showHistory = !showHistory" [ngClass]="{active: showHistory, inactive:(!history.length)}">
       <span *ngIf="!showHistory">sow history</span>
       <span *ngIf="showHistory">hide history</span>
     </button>
+  </div>
+  <div class="calculator-last-calculation calculator-display">
+    <div *ngIf="lastOperation" class="calculator-input">
+      <p>{{lastOperation.output}}</p>
+    </div>
+    <div *ngIf="lastOperation" class="calculator-result" (click)="copyToClipboard(lastOperation.result)">
+      <p>= <b>{{lastOperation.result}}</b></p>
+    </div>
   </div>
   <div *ngIf="!showHistory" class="calculator-display">
     <div class="calculator-input" (keypress)="onKeyPress($event)" (keydown)="onKeyDown($event)">

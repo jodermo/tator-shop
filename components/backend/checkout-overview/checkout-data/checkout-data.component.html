@@ -1,0 +1,52 @@
+<table *ngIf="checkout.data && checkout.data.products" id="checkoutData_{{checkout.id}}">
+    <thead>
+    <tr>
+        <th>{{app.text('product', 'shop')}}</th>
+        <th>{{app.text('amount', 'shop')}}</th>
+        <th>{{app.text('single_price', 'shop')}}</th>
+        <th>{{app.text('total', 'shop')}}</th>
+        <th *ngIf="print" class="print-hide">
+            <button class="print-hide"
+                    (click)="app.helper.printElementById('checkoutData_' + checkout.id, false, false )">
+                <div class="icon-print"></div>
+                <div>
+                    {{app.text('print_receipt', 'shop')}}
+                </div>
+            </button>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let product of checkout.data.products"
+        [ngClass]="{active:(app.currentElement === product)}">
+
+        <th>
+            <b class="link"
+               (click)="shop.showProduct(product, 'cash', 'checkout_overview')">{{product.name}}</b>
+        </th>
+        <td>
+            <i>{{product.amount}}</i>
+        </td>
+        <td>
+            <i>{{(product.price || 0)}} €</i>
+        </td>
+        <td>
+            <b class="text-large">{{product.amount * product.price}} €</b>
+        </td>
+        <td *ngIf="print" class="print-hide">
+
+        </td>
+    </tr>
+    <tr class="result">
+        <th>
+            <h4>=</h4>
+        </th>
+        <td colspan="2">
+        </td>
+        <td>
+            <h4>{{checkout.amount}} €</h4>
+        </td>
+        <td *ngIf="print" class="print-hide"></td>
+    </tr>
+    </tbody>
+</table>

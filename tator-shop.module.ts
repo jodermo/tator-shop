@@ -3,29 +3,35 @@ import { ProductComponent } from './components/product/product.component';
 import { ProductOverviewComponent } from './components/backend/product-overview/product-overview.component';
 import { CartComponent } from './components/cart/cart.component';
 import { ShopConfigurationComponent } from './components/backend/shop-configuration/shop-configuration.component';
-import { CashRegisterComponent } from './components/cash-register/cash-register.component';
 import { CalculatorComponent } from './components/calculator/calculator.component';
-import { TatorUiComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-ui-components.module';
 import { TatorImportsModule } from '../../tator-app/angular-app/src/app/tator-imports.module';
-import { TatorDataComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-data-components.module';
-import { TatorFileComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-file-components.module';
 import { ProductListComponent } from './components/product-list/product-list.component';
+import { CashRegisterBarcodeComponent } from './components/backend/cash-register/cach-register-barcode/cash-register-barcode.component';
+import { CashRegisterComponent } from './components/backend/cash-register/cash-register.component';
+import { CheckoutDataComponent } from './components/backend/checkout-overview/checkout-data/checkout-data.component';
+import { CheckoutTableComponent } from './components/backend/checkout-overview/checkout-table/checkout-table.component';
 import { CheckoutOverviewComponent } from './components/backend/checkout-overview/checkout-overview.component';
-import { CheckoutDataComponent } from './components/backend/checkout-data/checkout-data.component';
-import { TatorUserComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-user-components.module';
-import { TatorFormComponentsModule } from '../../tator-app/angular-app/modules/tator-core/tator-form-components.module';
-import { CashRegisterBarcodeComponent } from './components/cash-register/cach-register-barcode/cash-register-barcode.component';
+import { CashRegisterSettingsComponent } from './components/backend/cash-register-settings/cash-register-settings.component';
+import { IndividualProductComponent } from './components/backend/cash-register/individual-product/individual-product.component';
+import { TatorUiComponentsModule } from '../../tator-app/angular-app/src/app/modules/tator-core/tator-ui-components.module';
+import { TatorFileComponentsModule } from '../../tator-app/angular-app/src/app/modules/tator-core/tator-file-components.module';
+import { TatorFormComponentsModule } from '../../tator-app/angular-app/src/app/modules/tator-core/tator-form-components.module';
+import { TatorUserComponentsModule } from '../../tator-app/angular-app/src/app/modules/tator-core/tator-user-components.module';
+import { TatorDataComponentsModule } from '../../tator-app/angular-app/src/app/modules/tator-core/tator-data-components.module';
 
 @NgModule({
     declarations: [
         ProductListComponent,
         ProductComponent,
+        IndividualProductComponent,
         ProductOverviewComponent,
         CheckoutOverviewComponent,
+        CheckoutTableComponent,
         CheckoutDataComponent,
         ShopConfigurationComponent,
         CartComponent,
         CashRegisterComponent,
+        CashRegisterSettingsComponent,
         CashRegisterBarcodeComponent,
         CalculatorComponent
     ],
@@ -41,13 +47,17 @@ import { CashRegisterBarcodeComponent } from './components/cash-register/cach-re
     exports: [
         ProductListComponent,
         ProductComponent,
+        IndividualProductComponent,
         ProductOverviewComponent,
         CheckoutOverviewComponent,
+        CheckoutTableComponent,
         CheckoutDataComponent,
         ShopConfigurationComponent,
         CartComponent,
         CashRegisterComponent,
+        CashRegisterSettingsComponent,
         CashRegisterBarcodeComponent,
+        CalculatorComponent
     ]
 })
 export class TatorShopModule {

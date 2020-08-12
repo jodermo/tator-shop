@@ -1,5 +1,6 @@
 @import "../../layout/colors";
 
+
 $product_background: $color_light;
 $product_color: $color_dark;
 $product_header_background: $color_secondary;
@@ -121,7 +122,6 @@ $register_item_width: 33.33%;
   }
 }
 
-
 .product-list {
   display: flex;
   flex-wrap: wrap;
@@ -159,16 +159,36 @@ $register_item_width: 33.33%;
 
     }
   }
-}
 
-.list-selection {
-  .list-item.product-list-item {
+  &.list-selection {
+    .list-item.product-list-item {
 
-    max-width: $register_item_width;
+      flex-basis: 33.333%;
+      margim: $gap_small;
+      border: 1px solid $color_secondary;
 
-
+    }
   }
 }
+
+.popup-content {
+  .product {
+    background: none;
+    border: none;
+    border-radius: 0;
+    color: $color_popup_color;
+    padding: 0;
+
+    .product-header,
+    .product-content,
+    .product-footer {
+      color: $color_popup_color;
+      margin: $gap_medium 0;
+      padding: 0;
+    }
+  }
+}
+
 
 .layout-classic {
   position: absolute;

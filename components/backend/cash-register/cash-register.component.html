@@ -1,7 +1,15 @@
 <div class="horizontal-flex full-height layout-{{layout}}" *ngIf="shop.register.ready">
-    <div class="article full mobile-article-small" *ngIf="app.data.table('product-type').length">
+    <app-mobile-navigation class="full-width" [items]="[
+    {name: 'product_types' , visible:(app.data.table('product-type').length !== 0)},
+    {name: 'product_categories' , visible:(app.data.table('product-category').length !== 0)},
+    {name: 'product_groups' , visible:(app.data.table('product-group').length !== 0)},
+    {name: 'select_products', visible:true }
+    ]"></app-mobile-navigation>
+    <div class="article full mobile-article-small mobile-tab-content" *ngIf="app.data.table('product-type').length"
+         [ngClass]="{'mobile-active':(app.currentMobileTab === 'product_types')}">
         <div class="article-title">
             <span>{{app.text('product_types', 'shop')}}</span>
+            <app-mobile-navigation [closeButton]="true"></app-mobile-navigation>
         </div>
         <div class="article-content">
             <div class="list-selection">
@@ -18,9 +26,11 @@
             </div>
         </div>
     </div>
-    <div class="article full mobile-article-small" *ngIf="app.data.table('product-category').length">
+    <div class="article full mobile-article-small mobile-tab-content" *ngIf="app.data.table('product-category').length"
+         [ngClass]="{'mobile-active':(app.currentMobileTab === 'product_categories')}">
         <div class="article-title">
             <span>{{app.text('product_categories', 'shop')}}</span>
+            <app-mobile-navigation [closeButton]="true"></app-mobile-navigation>
         </div>
         <div class="article-content">
             <div class="list-selection">
@@ -37,9 +47,11 @@
             </div>
         </div>
     </div>
-    <div class="article full mobile-article-small" *ngIf="app.data.table('product-group').length">
+    <div class="article full mobile-article-small mobile-tab-content" *ngIf="app.data.table('product-group').length"
+         [ngClass]="{'mobile-active':(app.currentMobileTab === 'product_groups')}">
         <div class="article-title">
             <span>{{app.text('product_groups', 'shop')}}</span>
+            <app-mobile-navigation [closeButton]="true"></app-mobile-navigation>
         </div>
         <div class="article-content">
             <div class="list-selection">
@@ -55,7 +67,8 @@
             </div>
         </div>
     </div>
-    <div class="article full flex-item">
+    <div class="article full flex-item mobile-tab-content"
+         [ngClass]="{'mobile-active':(app.currentMobileTab === 'select_products')}">
         <div class="article-title">
             <span>{{app.text('select_products', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
@@ -64,10 +77,15 @@
                 <button class="edit-button" (click)="app.showPage('shop', 'products')">
                     {{app.text('edit', 'shop')}}
                 </button>
+                <app-mobile-navigation [closeButton]="true"></app-mobile-navigation>
             </div>
         </div>
-        <div class="article-content" *ngIf="products && products.length">
-            <div class="product-list list-selection">
+        <div class="article-content">
+            <div class="product-list list-selection product-selection">
+                <div class="list-item product-list-item" (click)="newIndividualProduct()"
+                     [ngClass]="{active:(individualProduct !== null)}">
+                    {{app.text('individual_product', 'shop')}}
+                </div>
                 <div class="list-item product-list-item" *ngFor="let product of products"
                      (click)="shop.register.addProduct(product)">
                     <div class="product-image" *ngIf="product.imageId">
@@ -84,12 +102,16 @@
         </div>
         <div class="article-content" *ngIf="!products || !products.length">
             <b><i>{{app.text('no_products_available_for_selection', 'shop')}}</i></b>
+            <button (click)="app.showPage('cash', 'products')">
+                {{app.text('product_configuration', 'shop')}}
+            </button>
         </div>
     </div>
     <div class="article full flex-item">
         <div class="article-title">
             <span>{{app.text('cash_register', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
+                <app-change-user></app-change-user>
                 <button (click)="shop.setLocalSettings('receiveBarcode', !shop.localSettings.receiveBarcode)"
                         [ngClass]="{active:(shop.localSettings.receiveBarcode)}">
                     <div class="horizontal-flex">
@@ -105,7 +127,7 @@
             </div>
         </div>
         <div class="article-content" *ngIf="shop.register.registerProducts && shop.register.registerProducts.length">
-            <div class="product-list list-result">
+            <div class="product-list list-result product-selection-result">
                 <div class="list-item product-list-item active" *ngFor="let product of shop.register.registerProducts">
                     <div class="product-image" *ngIf="product.imageId">
                         <app-file-preview [file]="app.fileById(product.imageId)"></app-file-preview>
@@ -115,12 +137,12 @@
                                 (click)="shop.register.removeProduct(product)">{{app.text('remove', 'shop')}}</button>
                         <span>{{shop.register.productAmount[product.id]}}x </span>
                         <span> {{(product.name || product.id)}}</span>
-                        <span> à {{product.price}} {{shop.productPrice(product).currency.symbol}}</span>
-                        <span> = {{shop.productPrice(product, shop.register.productAmount[product.id]).gross}} {{shop.productPrice(product).currency.symbol}}</span><br>
-                        <div *ngIf="shop.productPrice(product).tax">
-                            <b>+ {{shop.productPrice(product).tax.value}} %</b>
-                            <span>{{shop.productPrice(product).tax.name}}</span> <br>
-                            <span> = {{shop.productPrice(product, shop.register.productAmount[product.id]).net}} {{shop.productPrice(product).currency.symbol}}</span>
+                        <span> à {{product.price}} {{shop.register.price(product).symbol}}</span>
+                        <span> = {{shop.register.price(product, shop.register.productAmount[product.id]).gross}} {{shop.register.price(product).symbol}}</span><br>
+                        <div *ngIf="shop.register.price(product).tax">
+                            <b>+ {{shop.register.price(product).tax.value}} %</b>
+                            <span>{{shop.register.price(product).tax.name}}</span> <br>
+                            <span> = {{shop.register.price(product, shop.register.productAmount[product.id]).net}} {{shop.register.price(product).symbol}}</span>
                         </div>
 
                     </div>
@@ -128,14 +150,16 @@
                 </div>
             </div>
         </div>
-        <div class="article-content" *ngIf="!products || !products.length">
-            <b><i>{{app.text('no_products_available_for_selection', 'shop')}}</i></b>
+
+        <div class="article-content" *ngIf="!shop.register.registerProducts || !shop.register.registerProducts.length">
+            <b><i>{{app.text('no_products_in_cash_register', 'shop')}}</i></b>
         </div>
+
         <div class="article-footer">
             <button class="checkout-button"
                     [ngClass]="{inactive:(!shop.register.registerProducts || !shop.register.registerProducts.length),
                     active:(shop.register.checkoutData)}"
-                    (click)="shop.register.checkout(); shop.previewProduct = null;">
+                    (click)="shop.register.checkout(); app.currentElement = null;">
 
                 <span>
                     {{shop.register.total.amount}} {{app.text('products', 'shop')}}
@@ -149,6 +173,29 @@
     </div>
 </div>
 
+
+<div class="popup-overlay layout-{{app.popupLayout}}"
+     [ngClass]="{active:(individualProduct !== null)}">
+    <div class="popup-container" *ngIf="individualProduct !== null">
+        <div class="popup-header">
+            <h3>{{app.text('individual_product', 'shop')}}</h3>
+            <app-popup-options></app-popup-options>
+            <button class="close-button" (click)="individualProduct = null">
+                {{app.text('close', 'shop')}}
+            </button>
+        </div>
+        <div class="popup-content">
+            <app-individual-product [product]="individualProduct"></app-individual-product>
+        </div>
+        <div class="popup-footer">
+                <button class="checkout-button" (click)="addIndividualProduct()">
+                    {{app.text('checkout', 'shop')}}
+                </button>
+        </div>
+    </div>
+</div>
+
+
 <div class="popup-overlay layout-{{app.popupLayout}}"
      [ngClass]="{active:(shop.register.checkoutData)}">
     <div class="popup-container" *ngIf="shop.register.checkoutData">
@@ -160,20 +207,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <div class="product-list list-selection">
-                <div class="list-item product-list-item active" *ngFor="let product of shop.register.registerProducts">
-                    <div>
-                        <span>{{shop.register.productAmount[product.id]}}x </span>
-                        <span> {{(product.name || product.id)}}</span>
-                        <span> {{shop.productPrice(product, shop.register.productAmount[product.id]).gross}} {{shop.productPrice(product).currency.symbol}}</span><br>
-                        <div *ngIf="shop.productPrice(product).tax">
-                            <b>+ {{shop.productPrice(product).tax.value}} %</b>
-                            <span>{{shop.productPrice(product).tax.name}}</span> <br>
-                            <span> = {{shop.productPrice(product, shop.register.productAmount[product.id]).net}} {{shop.productPrice(product).currency.symbol}}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <app-checkout-data [checkout]="shop.register.checkoutData"></app-checkout-data>
         </div>
         <div class="popup-footer">
             <button *ngFor="let payment of app.data.table('payment')" class="checkout-button"
@@ -183,23 +217,29 @@
                     {{payment.name || payment.id}}
                 </span>
             </button>
+            <div class="app-hint" *ngIf="!app.data.table('payment').length">
+                <p>{{app.text('no_payment_available', 'shop')}}</p>
+                <button (click)="app.showPage('shop', 'configuration')">
+                    {{app.text('configuration_page', 'shop')}}
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="popup-overlay layout-{{app.popupLayout}}"
-     [ngClass]="{active:(shop.previewProduct && shop.localSettings.showRegisterProduct && !shop.register.checkoutData)}">
+     [ngClass]="{active:(shop.app.currentElement && shop.localSettings.showRegisterProduct && !shop.register.checkoutData)}">
     <div class="popup-container"
-         *ngIf="shop.previewProduct && shop.localSettings.showRegisterProduct && !shop.register.checkoutData">
+         *ngIf="shop.app.currentElement && shop.localSettings.showRegisterProduct && !shop.register.checkoutData">
         <div class="popup-header">
-            <h3>{{app.text('product', 'shop')}}</h3>
+            <h3>{{shop.app.currentElement.name || shop.app.currentElement.id}}</h3>
             <app-popup-options></app-popup-options>
-            <button class="close-button" (click)="shop.previewProduct = null">
+            <button class="close-button" (click)="shop.app.currentElement = null">
                 {{app.text('close', 'shop')}}
             </button>
         </div>
         <div class="popup-content">
-            <app-product [layout]="'full'" [product]="shop.previewProduct" [edit]="true"
+            <app-product [layout]="'full'" [product]="shop.app.currentElement" [edit]="true"
                          [cart]="false"></app-product>
         </div>
     </div>

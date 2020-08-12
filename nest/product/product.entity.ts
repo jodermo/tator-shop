@@ -30,6 +30,9 @@ export class Product {
     price: number;
 
     @Column({nullable: true, default: null})
+    taxId: number;
+
+    @Column({nullable: true, default: null})
     stock: number;
 
     @Column({nullable: true, default: null})
@@ -42,16 +45,10 @@ export class Product {
     manufacturerId: number;
 
     @Column({nullable: true, default: null})
-    currencyId: number;
-
-    @Column({nullable: true, default: null})
     categoryId: number;
 
     @Column({type: 'text', nullable: true, default: null})
     groupIds: any;
-
-    @Column({nullable: true, default: null})
-    taxId: number;
 
     @Column({nullable: true, default: null})
     discountId: number;

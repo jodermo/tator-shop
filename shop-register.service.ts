@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ShopService } from './shop.service';
-import { AppService } from '../../tator-app/angular-app/modules/tator-core/services/app.service';
+import { AppService } from '../../tator-app/angular-app/src/app/services/app.service';
 import { Product } from './api/product.entity';
 import { Checkout } from './api/checkout.entity';
 import { Payment } from './api/payment.entity';
+import { Tax } from './api/tax.entity';
+import { Currency } from './api/currency.entity';
 
 
 @Injectable({
@@ -20,7 +22,13 @@ export class ShopRegisterService {
         net: 0
     };
     ready = false;
-    checkoutData;
+    checkoutData: Checkout;
+
+    currency: Currency;
+    selectedTax: Tax;
+    inputIsNet = false;
+    individualProducts: Product[] = [];
+
 
     constructor(public app: AppService) {
     }
@@ -41,28 +49,42 @@ export class ShopRegisterService {
         let amount = 0;
         for (const product of this.registerProducts) {
             amount += this.productAmount[product.id];
-            grossPrice += this.shop.productPrice(product, this.productAmount[product.id]).gross;
-            netPrice += this.shop.productPrice(product, this.productAmount[product.id]).net;
+            grossPrice += this.price(product, this.productAmount[product.id]).gross;
+            netPrice += this.price(product, this.productAmount[product.id]).net;
         }
         this.total.amount = amount;
         this.total.gross = grossPrice;
         this.total.net = netPrice;
     }
 
+    price(product, amount = 1, currency: Currency = this.currency, tax: Tax = this.selectedTax, inputIsNet = this.inputIsNet) {
+        return this.shop.productPrice(product, amount, currency, tax, inputIsNet);
+    }
+
     clearProducts() {
         this.productAmount = {};
         this.registerProducts = [];
+        this.individualProducts = [];
         this.update();
     }
 
+    uniqId() {
+        return Date.now();
+    }
 
     addProduct(product: Product) {
         this.checkoutData = null;
+        if (product.id === 0 && product.type === 'individual') {
+            product.id = this.uniqId();
+            product.itemNumber += '_' + product.id;
+            this.individualProducts.push(product);
+        }
         if (!this.productAmount[product.id]) {
             this.productAmount[product.id] = 1;
         } else {
             this.productAmount[product.id]++;
         }
+
         this.update();
         this.app.popupLayout = 'right';
         this.shop.showProduct(product, 'cash', 'cash_register');
@@ -81,11 +103,16 @@ export class ShopRegisterService {
         this.registerProducts = this.app.data.table('product').filter(product => {
             return this.productAmount[product.id] && this.productAmount[product.id] > 0;
         });
+        for (const product of this.individualProducts) {
+            this.registerProducts.push(product);
+        }
     }
 
     checkout() {
-        this.shop.previewProduct = null;
+        this.app.currentElement = null;
         this.checkoutData = new Checkout();
+        this.checkoutData.data = this.getCheckoutData();
+
     }
 
     confirmCheckout(payment: Payment) {
@@ -110,6 +137,7 @@ export class ShopRegisterService {
             this.checkoutData.data = this.checkoutData;
             this.checkoutData.paymentId = payment.id;
             this.checkoutData.data = this.getCheckoutData();
+
             this.app.data.add('checkout', this.checkoutData, (e) => {
                 this.checkoutData = null;
                 if (success) {
@@ -122,7 +150,7 @@ export class ShopRegisterService {
     getCheckoutData() {
         const checkoutProducts = [];
         for (const product of this.registerProducts) {
-            const price = this.shop.productPrice(product);
+            const price = this.price(product);
             let tax = 0;
             if (price.tax && price.tax.value) {
                 tax = price.tax.value;

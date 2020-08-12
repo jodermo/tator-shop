@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ShopService } from '../../shop.service';
-import { AppService } from '../../../../tator-app/angular-app/modules/tator-core/services/app.service';
+import { AppService } from '../../../../tator-app/angular-app/src/app/services/app.service';
 
 @Component({
   selector: 'app-cart',

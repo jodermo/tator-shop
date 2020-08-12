@@ -1,0 +1,34 @@
+<div class="individual-product" *ngIf="product">
+
+    <div class="popup-content">
+        <app-data-editor [autoSave]="false" [data]="product" [fieldOptions]="{
+        typeId: {name: 'product_type', type: 'select', tableName: 'product-type'},
+        categoryId: {name: 'product_category', type: 'select', tableName: 'product-category'},
+        groupIds: {name: 'product_group', type: 'multi-select', tableName: 'product-group', nameKey: 'name'},
+        manufacturerId: {name: 'manufacturer', type: 'select', tableName: 'manufacturer'},
+        currencyId: {name: 'currency', type: 'select', tableName: 'currency'},
+        discountId: {name: 'discount', type: 'select', tableName: 'discount'},
+        shippingIds: {name: 'shipping', type: 'multi-select', tableName: 'shipping', nameKey: 'name'},
+        taxId: {name: 'tax', type: 'select', tableName: 'tax'},
+        available: { type: 'checkbox'},
+        cashRegister: { type: 'checkbox'},
+        onlineShop: { type: 'checkbox'}
+      }"
+                         [hiddenFields]="['id','name', 'available', 'alias', 'type', 'price', 'stock','onlineShop', 'cashRegister',  'itemNumber',  'files',   'discountId', 'manufacturerId', 'description', 'shippingIds']"
+                         [values]="{
+                         id: 0,
+                         name: app.text('individual-product', 'shop'),
+                         type: 'individual',
+                         itemNumber: 'indi',
+                         description: app.text('individual-product', 'shop'),
+                         available: true,
+                         onlineShop: false,
+                         cashRegister: false
+                         }"
+                         (onDataUpdate)="productChange()"
+        ></app-data-editor>
+        <h3>{{app.text('price', 'shop')}} {{product.price}}</h3>
+        <app-calculator [input]="product.price"
+                        (onUpdate)="product.price = $event.result; productChange()"></app-calculator>
+    </div>
+</div>

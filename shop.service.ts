@@ -10,13 +10,18 @@ import { Shipping } from './api/shipping.entity';
 import { Tax } from './api/tax.entity';
 import { Currency } from './api/currency.entity';
 import { ShopConfig } from '../../config/shop.config';
-import { AppService } from '../../tator-app/angular-app/modules/tator-core/services/app.service';
+import { AppService } from '../../tator-app/angular-app/src/app/services/app.service';
 import { ShopRegisterService } from './shop-register.service';
 import { ProductType } from './api/product-type.entity';
 import { Checkout } from './api/checkout.entity';
 
 
 export const ShopTables = [
+    'product',
+    'product-group',
+    'product-category',
+    'register-settings',
+    'checkout',
     'payment',
     'discount',
     'supplier',
@@ -24,11 +29,7 @@ export const ShopTables = [
     'shipping',
     'manufacturer',
     'tax',
-    'product-group',
-    'product-category',
-    'product',
     'order',
-    'checkout'
 ];
 
 
@@ -45,13 +46,10 @@ export class CartObject {
 export class ShopService {
 
     config = ShopConfig;
-    loading = false;
+    loading = true;
     updating = false;
     ready = false;
-
     cart: CartObject[] = [];
-    previewProduct;
-    barcodes = [];
 
     currentOrder;
     currentProduct;
@@ -125,10 +123,17 @@ export class ShopService {
     filterValue: string;
 
     constructor(public app: AppService, public register: ShopRegisterService) {
+        this.loadLocalSettings();
         this.init(() => {
             register.init(this);
         });
-
+        this.app.websocket.onBarcode().subscribe(barcode => {
+            console.log('onBarcode', barcode);
+            this.onReceiveBarcode(barcode);
+        });
+        this.app.onDetectBarcode((barcode) => {
+            this.onDetectBarcode(barcode);
+        });
     }
 
     saveLocalSettings() {
@@ -149,7 +154,6 @@ export class ShopService {
 
     init(success: any = null) {
         this.loading = true;
-        this.loadLocalSettings();
         this.getData(() => {
             this.loading = false;
             this.ready = true;
@@ -157,49 +161,9 @@ export class ShopService {
                 success();
             }
         });
-        this.app.websocket.onBarcode().subscribe(barcode => {
-            this.onReceiveBarcode(barcode);
-        });
+
     }
 
-    onDetectBarcode(barcode: any) {
-        if (barcode && barcode.data && barcode.data.codeResult) {
-            const code = barcode.data.codeResult.code;
-            let productExist = false;
-            for (let product of this.app.data.table('product')) {
-                product = product as Product;
-                productExist = true;
-                if (code === product.itemNumber) {
-                    this.previewProduct = product;
-                }
-            }
-            if (!productExist && this.localSettings.receiveBarcode) {
-                this.app.showPage('barcode');
-            }
-        }
-    }
-
-    onReceiveBarcode(barcode: any) {
-        if (this.localSettings.receiveBarcode) {
-            if (barcode && barcode.userId && barcode.userId === this.app.user.id) {
-                this.barcodes.push(barcode);
-                if (barcode && barcode.data && barcode.data.codeResult) {
-                    const code = barcode.data.codeResult.code;
-                    let codeExist = false;
-                    for (let product of this.app.data.table('product')) {
-                        product = product as Product;
-                        if (code === product.itemNumber) {
-                            codeExist = true;
-                            this.register.addProduct(product);
-                        }
-                    }
-                    if (!codeExist) {
-
-                    }
-                }
-            }
-        }
-    }
 
     getData(success: any = false) {
         this.loading = true;
@@ -208,7 +172,6 @@ export class ShopService {
             if (success) {
                 success();
             }
-            this.loading = false;
         });
 
     }
@@ -269,7 +232,44 @@ export class ShopService {
         if (page) {
             this.app.showPage(page, category || null);
         }
-        this.previewProduct = product;
+        this.app.currentElement = product;
+    }
+
+    onReceiveBarcode(barcode: any) {
+        if (this.localSettings.receiveBarcode) {
+            const product = this.barcodeProduct(barcode);
+            if (product) {
+                this.register.addProduct(product);
+            }
+
+        }
+    }
+
+    onDetectBarcode(barcode: any) {
+        const product = this.barcodeProduct(barcode);
+        if (product) {
+            if (!this.app.localSettings.barcodeToCheckout) {
+                this.app.currentElement = product;
+            } else {
+                this.register.addProduct(product);
+            }
+        }
+
+    }
+
+    barcodeProduct(barcode: any) {
+        if (barcode && barcode.userId && barcode.userId === this.app.user.id) {
+            if (barcode && barcode.data && barcode.data.codeResult) {
+                const code = barcode.data.codeResult.code;
+                for (let product of this.app.data.table('product')) {
+                    product = product as Product;
+                    if (code === product.itemNumber) {
+                        return product;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     newProduct() {
@@ -357,25 +357,40 @@ export class ShopService {
         }
     }
 
-    productPrice(product: Product, amount = 1) {
+    productPrice(product: Product, amount = 1, currency: Currency = null, tax: Tax = null, inputIsNet = false) {
+        /* gross price */
         let grossPrice = product.price * amount;
+        let symbol = '€';
+        if (currency) {
+            /* currency rate */
+            if (currency.rate) {
+                grossPrice = grossPrice * currency.rate;
+            }
+            /* currency symbol */
+            if (currency.symbol) {
+                symbol = currency.symbol;
+            }
+        }
+
+        /* gross / net price */
         let netPrice = grossPrice;
-        let tax: any;
-        if (product.taxId) {
-            tax = this.app.data.byId('tax', product.taxId);
+        if (inputIsNet) {
+            if (tax && tax.value) {
+                grossPrice = grossPrice - (product.price * tax.value / 100);
+            }
+        } else {
+            if (tax && tax.value) {
+                netPrice += (product.price * tax.value / 100);
+            }
         }
-        if (tax && tax.value) {
-            netPrice += (product.price * tax.value / 100)
-        }
-        let currency = this.defaultCurrency;
-        if (product.currencyId) {
-            currency = this.app.data.byId('currency', product.currencyId);
-        }
+
+
         return {
             price: product.price,
             amount: grossPrice,
             gross: grossPrice,
             net: netPrice,
+            symbol: symbol,
             currency: currency,
             tax: tax
         };

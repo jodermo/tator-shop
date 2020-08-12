@@ -1,8 +1,6 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ShopService } from '../../shop.service';
-import { AppService } from '../../../../tator-app/angular-app/modules/tator-core/services/app.service';
-import { Product } from '../../api/product.entity';
-import { ProductOverviewComponent } from '../backend/product-overview/product-overview.component';
+import { Component } from '@angular/core';
+import { ProductOverviewComponent } from '../../backend/product-overview/product-overview.component';
+import { Product } from '../../../api/product.entity';
 
 
 @Component({
@@ -18,6 +16,8 @@ export class CashRegisterComponent extends ProductOverviewComponent {
     ];
 
     layout = this.layouts[0];
+
+    individualProduct: Product = null;
 
     getProducts() {
         this.products = this.app.data.table('product').filter(product => {
@@ -36,5 +36,16 @@ export class CashRegisterComponent extends ProductOverviewComponent {
 
     saveLayout() {
         localStorage.setItem('cash-register-layout', this.layout);
+    }
+
+    newIndividualProduct() {
+        this.individualProduct = new Product();
+    }
+
+    addIndividualProduct() {
+        if (this.individualProduct) {
+            this.shop.register.addProduct(this.individualProduct);
+            this.individualProduct = null;
+        }
     }
 }

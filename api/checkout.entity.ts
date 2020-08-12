@@ -8,11 +8,19 @@ export class Checkout {
 
     amount: number = 0;
 
+    tip: number = 0;
+
     userId: number = null;
 
     customerId: number = null;
 
     paymentId: number = null;
+
+    taxId: number;
+
+    currencyId: number;
+
+    discountIds: any = [];
 
     data: any = null;
 

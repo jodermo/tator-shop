@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ShopService } from '../../../shop.service';
-import { AppService } from '../../../../../tator-app/angular-app/modules/tator-core/services/app.service';
+import { AppService } from '../../../../../tator-app/angular-app/src/app/services/app.service';
 import { ProductGroup } from '../../../api/product-group.entity';
 import { Product } from '../../../api/product.entity';
 
@@ -9,7 +9,7 @@ import { Product } from '../../../api/product.entity';
     templateUrl: './product-overview.component.html',
     styleUrls: ['./product-overview.component.scss']
 })
-export class ProductOverviewComponent implements OnInit {
+export class ProductOverviewComponent implements OnInit , OnChanges{
     selectedType: any = null;
     selectedGroup: any = null;
     selectedCategory: any = null;
@@ -24,12 +24,16 @@ export class ProductOverviewComponent implements OnInit {
         this.filterProducts();
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        this.filterProducts();
+    }
+
     showProd(product, e: any = null) {
         if (e) {
             e.preventDefault();
             e.stopPropagation();
         }
-        this.shop.previewProduct = product;
+        this.app.currentElement = product;
     }
 
     getProducts() {

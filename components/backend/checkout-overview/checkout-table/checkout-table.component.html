@@ -1,0 +1,52 @@
+<table class="mobile-table">
+    <thead>
+    <tr>
+        <th colspan="2">{{app.text('checkout_info', 'shop')}}</th>
+        <th>{{app.text('products', 'shop')}}</th>
+        <th class="print-hide"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr id="checkout_{{checkout.id}}" *ngFor="let checkout of data"
+        [ngClass]="{active: (shop.lastCheckout && shop.lastCheckout.id === checkout.id)}">
+        <th colspan="2">
+            <h4 class="date"><i>{{app.date(checkout.date).full}}</i></h4>
+            <span class="seller"
+                  *ngIf="checkout.userId && (app.userById(checkout.userId).firstName || app.userById(checkout.userId).lastName)">
+                            {{app.text('seller', 'shop')}}
+                : {{app.userById(checkout.userId).firstName}} {{app.userById(checkout.userId).lastName}}
+                        </span>
+            <span class="seller"
+                  *ngIf="checkout.userId && !app.userById(checkout.userId).firstName && !app.userById(checkout.userId).lastName">
+                          {{app.text('seller', 'shop')}}: {{app.userById(checkout.userId).login}}
+                        </span>
+            <span class="seller" *ngIf="!checkout.userId">
+                           {{app.text('seller', 'shop')}}: {{app.text('anonym', 'shop')}}
+                        </span>
+            <br>
+
+            <span class="customer"
+                  *ngIf="checkout.customerId && (app.userById(checkout.customerId).firstName || app.userById(checkout.customerId).lastName)">
+                            {{app.text('customer', 'shop')}}
+                : {{app.userById(checkout.customerId).firstName}} {{app.userById(checkout.customerId).lastName}}
+                        </span>
+            <span class="customer"
+                  *ngIf="checkout.customerId && !app.userById(checkout.customerId).firstName && !app.userById(checkout.customerId).lastName">
+                          {{app.text('customer', 'shop')}}: {{app.userById(checkout.customerId).login}}
+                        </span>
+            <span class="customer" *ngIf="!checkout.customerId">
+                            {{app.text('customer', 'shop')}}:  {{app.text('anonym', 'shop')}}
+                        </span>
+        </th>
+        <td>
+            <app-checkout-data [checkout]="checkout" ></app-checkout-data>
+        </td>
+        <td class="print-hide">
+            <button class="print-hide" (click)="app.helper.printElementById('checkout_' + checkout.id )">
+                <div class="icon-print"></div>
+                {{app.text('print', 'shop')}}
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>

@@ -1,27 +1,6 @@
 <div class="horizontal-flex full-height">
-    <div class="article full flex-item">
-        <div class="article-title">
-            <span>{{app.text('manufacturer', 'shop')}}</span>
-            <div class="horizontal-flex flex-item flex-end">
-                <button class="new-button" (click)="shop.initSelection(); shop.newManufacturer()">
-                    {{app.text('new', 'shop')}}
-                </button>
-            </div>
-        </div>
-        <div class="article-content">
-            <div class="list-selection">
-                <div class="list-item" *ngFor="let manufacturer of app.data.table('manufacturer')"
-                     (dblclick)="shop.initSelection(); shop.currentManufacturer = manufacturer;"
-                     [ngClass]="{active:(shop.currentManufacturer == manufacturer)}">
-                    <div><span> {{(manufacturer.name || manufacturer.id)}}</span></div>
-                    <button class="delete-button" (click)="shop.removePayment(manufacturer)">
-                        {{app.text('delete', 'shop')}}
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="article full flex-item">
+
+    <div class="article mobile-article-small mobile-article-small-height flex-item">
         <div class="article-title">
             <span>{{app.text('payments', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
@@ -43,7 +22,8 @@
             </div>
         </div>
     </div>
-    <div class="article full flex-item">
+
+    <div class="article mobile-article-small mobile-article-small-height flex-item">
         <div class="article-title">
             <span>{{app.text('currency', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
@@ -66,30 +46,7 @@
         </div>
     </div>
 
-    <div class="article full flex-item">
-        <div class="article-title">
-            <span>{{app.text('shipping_types', 'shop')}}</span>
-            <div class="horizontal-flex flex-item flex-end">
-                <button class="new-button" (click)="shop.initSelection(); shop.newShipping()">
-                    {{app.text('new', 'shop')}}
-                </button>
-            </div>
-        </div>
-        <div class="article-content">
-            <div class="list-selection">
-                <div class="list-item" *ngFor="let shipping of app.data.table('shipping')"
-                     (dblclick)="shop.initSelection(); shop.currentShipping = shipping;"
-                     [ngClass]="{active:(shop.currentShipping == shipping)}">
-                    <div><span> {{(shipping.name || shipping.id)}}</span></div>
-                    <button class="delete-button" (click)="shop.removeShipping(shipping)">
-                        {{app.text('delete', 'shop')}}
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="article full flex-item">
+    <div class="article mobile-article-small mobile-article-small-height flex-item">
         <div class="article-title">
             <span>{{app.text('taxes', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
@@ -112,7 +69,53 @@
         </div>
     </div>
 
-    <div class="article full flex-item">
+    <div class="article mobile-article-small mobile-article-small-height flex-item">
+        <div class="article-title">
+            <span>{{app.text('shipping_types', 'shop')}}</span>
+            <div class="horizontal-flex flex-item flex-end">
+                <button class="new-button" (click)="shop.initSelection(); shop.newShipping()">
+                    {{app.text('new', 'shop')}}
+                </button>
+            </div>
+        </div>
+        <div class="article-content">
+            <div class="list-selection">
+                <div class="list-item" *ngFor="let shipping of app.data.table('shipping')"
+                     (dblclick)="shop.initSelection(); shop.currentShipping = shipping;"
+                     [ngClass]="{active:(shop.currentShipping == shipping)}">
+                    <div><span> {{(shipping.name || shipping.id)}}</span></div>
+                    <button class="delete-button" (click)="shop.removeShipping(shipping)">
+                        {{app.text('delete', 'shop')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="article mobile-article-small mobile-article-small-height flex-item">
+        <div class="article-title">
+            <span>{{app.text('manufacturer', 'shop')}}</span>
+            <div class="horizontal-flex flex-item flex-end">
+                <button class="new-button" (click)="shop.initSelection(); shop.newManufacturer()">
+                    {{app.text('new', 'shop')}}
+                </button>
+            </div>
+        </div>
+        <div class="article-content">
+            <div class="list-selection">
+                <div class="list-item" *ngFor="let manufacturer of app.data.table('manufacturer')"
+                     (dblclick)="shop.initSelection(); shop.currentManufacturer = manufacturer;"
+                     [ngClass]="{active:(shop.currentManufacturer == manufacturer)}">
+                    <div><span> {{(manufacturer.name || manufacturer.id)}}</span></div>
+                    <button class="delete-button" (click)="shop.removePayment(manufacturer)">
+                        {{app.text('delete', 'shop')}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="article mobile-article-small mobile-article-small-height flex-item">
         <div class="article-title">
             <span>{{app.text('discounts', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
@@ -226,6 +229,25 @@
         <div class="popup-footer">
             <button class="save-button"
                     (click)="shop.updateOrAddDiscount(shop.currentDiscount); shop.currentDiscount = null;"
+                    [ngClass]="{inactive:(shop.updating)}">{{app.text('save')}}
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="popup-overlay layout-{{app.popupLayout}}" [ngClass]="{active:(shop.currentManufacturer)}">
+    <div class="popup-container" *ngIf="shop.currentManufacturer">
+        <div class="popup-header">
+            <h3>{{app.text('manufacturer', 'shop')}}</h3>
+            <app-popup-options></app-popup-options>
+            <button class="close-button" (click)="shop.currentManufacturer = null"></button>
+        </div>
+        <div class="popup-content">
+            <app-data-editor [data]="shop.currentManufacturer"></app-data-editor>
+        </div>
+        <div class="popup-footer">
+            <button class="save-button"
+                    (click)="shop.updateOrAddManufacturer(shop.currentManufacturer); shop.currentManufacturer = null;"
                     [ngClass]="{inactive:(shop.updating)}">{{app.text('save')}}
             </button>
         </div>

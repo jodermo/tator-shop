@@ -14,6 +14,9 @@ export class Checkout {
     @Column({nullable: true, default: 0})
     amount: number;
 
+    @Column({nullable: true, default: 0})
+    tip: number;
+
     @Column({nullable: true, default: null})
     userId: number;
 
@@ -22,6 +25,12 @@ export class Checkout {
 
     @Column({nullable: true, default: null})
     paymentId: number;
+
+    @Column({type: 'text', nullable: true, default: null})
+    discountIds: any;
+
+    @Column({nullable: true, default: null})
+    taxId: number;
 
     @Column({type: 'text', nullable: true, default: null})
     data: any;

@@ -26,8 +26,6 @@ export class Product {
 
   manufacturerId: number = null;
 
-  currencyId: number = null;
-
   categoryId: number = null;
 
   groupIds: any = [];

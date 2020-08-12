@@ -4,30 +4,29 @@
             <span>{{app.text('barcode_scanner', 'shop')}}</span>
         </div>
         <div class="article-content">
-            <app-barcode-scanner (onStart)="shop.previewProduct = null" (onDetect)="shop.onDetectBarcode($event)"
+            <app-barcode-scanner [shop]="true" (onStart)="app.currentElement = null" (onDetect)="app.onDetectBarcode($event)"
                                  #scannerComponent></app-barcode-scanner>
-            <app-barcode-data *ngIf="shop.barcodes" [data]="shop.barcodes"></app-barcode-data>
         </div>
     </div>
 </div>
 
 <div class="popup-overlay layout-{{app.popupLayout}}"
-     [ngClass]="{active:(shop.previewProduct)}">
-    <div class="popup-container" *ngIf="shop.previewProduct">
+     [ngClass]="{active:(app.currentElement && app.currentElement !== 'settings')}">
+    <div class="popup-container" *ngIf="app.currentElement && app.currentElement !== 'settings'">
         <div class="popup-header">
             <h3>{{app.text('product', 'shop')}}</h3>
             <app-popup-options></app-popup-options>
-            <button class="close-button" (click)="shop.previewProduct = null">
+            <button class="close-button" (click)="app.currentElement = null">
                 {{app.text('close', 'shop')}}
             </button>
         </div>
         <div class="popup-content">
-            <app-product [layout]="'full'" [product]="shop.previewProduct" [edit]="true"
+            <app-product [layout]="'full'" [product]="app.currentElement" [edit]="true"
                          [cart]="false"></app-product>
         </div>
         <div class="popup-footer">
             <button class="flex-item" [ngClass]="{active:(scannerComponent.scanning)}"
-                    (click)="scannerComponent.startScan(); shop.previewProduct = null">
+                    (click)="scannerComponent.startScan(); app.currentElement = null">
                 <div class="icon-start-camera"></div>
                 <div>
                     {{app.text('scan_barcode', 'backend')}}
