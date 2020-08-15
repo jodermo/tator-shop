@@ -124,8 +124,11 @@ export class ShopService {
 
     constructor(public app: AppService, public register: ShopRegisterService) {
         this.loadLocalSettings();
+
         this.init(() => {
             register.init(this);
+            this.ready = true;
+            this.loading = false;
         });
         this.app.websocket.onBarcode().subscribe(barcode => {
             console.log('onBarcode', barcode);
@@ -155,8 +158,6 @@ export class ShopService {
     init(success: any = null) {
         this.loading = true;
         this.getData(() => {
-            this.loading = false;
-            this.ready = true;
             if (success) {
                 success();
             }
@@ -168,6 +169,7 @@ export class ShopService {
     getData(success: any = false) {
         this.loading = true;
         this.app.loadDataTables(ShopTables, () => {
+
             this.getCartFromLocalStorage();
             if (success) {
                 success();

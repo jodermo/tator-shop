@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ShopService } from '../../../shop.service';
 import { AppService } from '../../../../../tator-app/angular-app/src/app/services/app.service';
 import { ProductGroup } from '../../../api/product-group.entity';
@@ -9,7 +9,7 @@ import { Product } from '../../../api/product.entity';
     templateUrl: './product-overview.component.html',
     styleUrls: ['./product-overview.component.scss']
 })
-export class ProductOverviewComponent implements OnInit , OnChanges{
+export class ProductOverviewComponent implements AfterViewInit, OnChanges {
     selectedType: any = null;
     selectedGroup: any = null;
     selectedCategory: any = null;
@@ -18,10 +18,16 @@ export class ProductOverviewComponent implements OnInit , OnChanges{
     products: Product[];
 
     constructor(public app: AppService, public shop: ShopService) {
+        this.products = this.app.data.table('product');
     }
 
-    ngOnInit(): void {
+    ngAfterViewInit(): void {
         this.filterProducts();
+        if (!this.products || !this.products.length) {
+            setTimeout(() => {
+                this.filterProducts();
+            }, 500);
+        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -37,7 +43,9 @@ export class ProductOverviewComponent implements OnInit , OnChanges{
     }
 
     getProducts() {
+
         this.products = this.app.data.table('product');
+        console.log('getProducts', this.products);
     }
 
     filterProducts() {
@@ -65,6 +73,7 @@ export class ProductOverviewComponent implements OnInit , OnChanges{
                 return false;
             });
         }
+        console.log('filterProducts', this.products);
     }
 
     addNewData(data) {

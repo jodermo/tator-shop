@@ -18,6 +18,7 @@ import { TatorFileComponentsModule } from '../../tator-app/angular-app/src/app/m
 import { TatorFormComponentsModule } from '../../tator-app/angular-app/src/app/modules/tator-core/tator-form-components.module';
 import { TatorUserComponentsModule } from '../../tator-app/angular-app/src/app/modules/tator-core/tator-user-components.module';
 import { TatorDataComponentsModule } from '../../tator-app/angular-app/src/app/modules/tator-core/tator-data-components.module';
+import { CashRegisterBarcodeDataComponent } from './components/backend/cash-register/cach-register-barcode-data/cash-register-barcode-data.component';
 
 @NgModule({
     declarations: [
@@ -33,6 +34,7 @@ import { TatorDataComponentsModule } from '../../tator-app/angular-app/src/app/m
         CashRegisterComponent,
         CashRegisterSettingsComponent,
         CashRegisterBarcodeComponent,
+        CashRegisterBarcodeDataComponent,
         CalculatorComponent
     ],
     imports: [
@@ -57,6 +59,7 @@ import { TatorDataComponentsModule } from '../../tator-app/angular-app/src/app/m
         CashRegisterComponent,
         CashRegisterSettingsComponent,
         CashRegisterBarcodeComponent,
+        CashRegisterBarcodeDataComponent,
         CalculatorComponent
     ]
 })

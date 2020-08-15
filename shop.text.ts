@@ -67,4 +67,6 @@ export let ShopText = [
     {alias: 'cashRegister', en: 'Cash register', de: 'Kasse'},
     {alias: 'onlineShop', en: 'Online shop', de: 'Online-Shop'},
     {alias: 'print_receipt ', en: 'receipt', de: 'Kassenbon'},
+    {alias: 'custom_product ', en: 'Custom', de: 'Benutzerdefiniert'},
+    {alias: 'no_products_in_cash_register ', en: 'No products in cash register', de: 'Keine Produkte in der Kasse'},
 ];

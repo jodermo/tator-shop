@@ -1,4 +1,4 @@
-<div class="horizontal-flex full-height layout-{{layout}}" *ngIf="shop.register.ready">
+<div class="horizontal-flex full-height layout-{{layout}}" *ngIf="shop.ready && shop.register.ready">
     <app-mobile-navigation class="full-width" [items]="[
     {name: 'product_types' , visible:(app.data.table('product-type').length !== 0)},
     {name: 'product_categories' , visible:(app.data.table('product-category').length !== 0)},
@@ -84,7 +84,7 @@
             <div class="product-list list-selection product-selection">
                 <div class="list-item product-list-item" (click)="newIndividualProduct()"
                      [ngClass]="{active:(individualProduct !== null)}">
-                    {{app.text('individual_product', 'shop')}}
+                    {{app.text('custom_product', 'shop')}}
                 </div>
                 <div class="list-item product-list-item" *ngFor="let product of products"
                      (click)="shop.register.addProduct(product)">
@@ -178,7 +178,7 @@
      [ngClass]="{active:(individualProduct !== null)}">
     <div class="popup-container" *ngIf="individualProduct !== null">
         <div class="popup-header">
-            <h3>{{app.text('individual_product', 'shop')}}</h3>
+            <h3>{{app.text('custom_product', 'shop')}}</h3>
             <app-popup-options></app-popup-options>
             <button class="close-button" (click)="individualProduct = null">
                 {{app.text('close', 'shop')}}
