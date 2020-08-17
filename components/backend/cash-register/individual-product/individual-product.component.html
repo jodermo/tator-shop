@@ -1,7 +1,8 @@
 <div class="individual-product" *ngIf="product">
-
-    <div class="popup-content">
-        <app-data-editor [autoSave]="false" [data]="product" [fieldOptions]="{
+    <h3>{{app.text('price', 'shop')}} {{product.price}}</h3>
+    <app-calculator [input]="product.price"
+                    (onUpdate)="product.price = $event.result; productChange()"></app-calculator>
+    <app-data-editor [autoSave]="false" [data]="product" [fieldOptions]="{
         typeId: {name: 'product_type', type: 'select', tableName: 'product-type'},
         categoryId: {name: 'product_category', type: 'select', tableName: 'product-category'},
         groupIds: {name: 'product_group', type: 'multi-select', tableName: 'product-group', nameKey: 'name'},
@@ -14,8 +15,8 @@
         cashRegister: { type: 'checkbox'},
         onlineShop: { type: 'checkbox'}
       }"
-                         [hiddenFields]="['id','name', 'available', 'alias', 'type', 'price', 'stock','onlineShop', 'cashRegister',  'itemNumber',  'files',   'discountId', 'manufacturerId', 'description', 'shippingIds']"
-                         [values]="{
+                     [hiddenFields]="['id','name', 'available', 'alias', 'type', 'price', 'stock','onlineShop', 'cashRegister',  'itemNumber',  'files',   'discountId', 'manufacturerId', 'description', 'shippingIds']"
+                     [values]="{
                          id: 0,
                          name: app.text('individual-product', 'shop'),
                          type: 'individual',
@@ -25,10 +26,7 @@
                          onlineShop: false,
                          cashRegister: false
                          }"
-                         (onDataUpdate)="productChange()"
-        ></app-data-editor>
-        <h3>{{app.text('price', 'shop')}} {{product.price}}</h3>
-        <app-calculator [input]="product.price"
-                        (onUpdate)="product.price = $event.result; productChange()"></app-calculator>
-    </div>
+                     (onDataUpdate)="productChange()"
+    ></app-data-editor>
+
 </div>

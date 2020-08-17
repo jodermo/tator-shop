@@ -24,14 +24,37 @@ export class ShopRegisterService {
     ready = false;
     checkoutData: Checkout;
 
-    currency: Currency;
+    currency: Currency = new Currency();
     selectedTax: Tax;
     inputIsNet = false;
+    individualProduct: Product = null;
     individualProducts: Product[] = [];
+
 
 
     constructor(public app: AppService) {
     }
+
+
+    sendDisplayData() {
+        let lastCheckout = null;
+        if (!this.registerProducts || !this.registerProducts.length) {
+            lastCheckout = this.shop.lastCheckout;
+        }
+        this.app.websocket.sendDisplayData({
+            registerProducts: this.registerProducts,
+            productAmount: this.productAmount,
+            checkoutData: this.checkoutData,
+            lastCheckout: lastCheckout,
+            currency: this.currency,
+            selectedTax: this.selectedTax,
+            inputIsNet: this.inputIsNet,
+            individualProducts: this.individualProducts,
+            total: this.total,
+            currentProduct: this.app.currentElement as Product
+        }, 'cash-register-data');
+    }
+
 
     init(shop: ShopService) {
         this.shop = shop;
@@ -41,6 +64,7 @@ export class ShopRegisterService {
     update() {
         this.getRegisterProducts();
         this.calculateTotalPrice();
+        this.sendDisplayData();
     }
 
     calculateTotalPrice() {
@@ -53,8 +77,8 @@ export class ShopRegisterService {
             netPrice += this.price(product, this.productAmount[product.id]).net;
         }
         this.total.amount = amount;
-        this.total.gross = grossPrice;
-        this.total.net = netPrice;
+        this.total.gross =  grossPrice;
+        this.total.net =  netPrice;
     }
 
     price(product, amount = 1, currency: Currency = this.currency, tax: Tax = this.selectedTax, inputIsNet = this.inputIsNet) {
@@ -74,6 +98,7 @@ export class ShopRegisterService {
 
     addProduct(product: Product) {
         this.checkoutData = null;
+
         if (product.id === 0 && product.type === 'individual') {
             product.id = this.uniqId();
             product.itemNumber += '_' + product.id;
@@ -84,11 +109,13 @@ export class ShopRegisterService {
         } else {
             this.productAmount[product.id]++;
         }
+        this.individualProduct = null;
 
         this.update();
         this.app.popupLayout = 'right';
         this.shop.showProduct(product, 'cash', 'cash_register');
         this.app.playAudio('scanner');
+
     }
 
     removeProduct(product: Product) {
@@ -112,7 +139,7 @@ export class ShopRegisterService {
         this.app.currentElement = null;
         this.checkoutData = new Checkout();
         this.checkoutData.data = this.getCheckoutData();
-
+        this.sendDisplayData();
     }
 
     confirmCheckout(payment: Payment) {
@@ -128,6 +155,7 @@ export class ShopRegisterService {
         this.app.playAudio('cash');
         this.app.showPage('cash', 'checkout_overview');
         this.clearProducts();
+        this.sendDisplayData();
     }
 
     addNewCheckout(payment: Payment, success: any = null) {
@@ -137,9 +165,9 @@ export class ShopRegisterService {
             this.checkoutData.data = this.checkoutData;
             this.checkoutData.paymentId = payment.id;
             this.checkoutData.data = this.getCheckoutData();
-
             this.app.data.add('checkout', this.checkoutData, (e) => {
                 this.checkoutData = null;
+
                 if (success) {
                     success(e);
                 }
@@ -148,6 +176,7 @@ export class ShopRegisterService {
     }
 
     getCheckoutData() {
+
         const checkoutProducts = [];
         for (const product of this.registerProducts) {
             const price = this.price(product);

@@ -17,7 +17,7 @@ export class CashRegisterComponent extends ProductOverviewComponent {
 
     layout = this.layouts[0];
 
-    individualProduct: Product = null;
+
 
     getProducts() {
         this.products = this.app.data.table('product').filter(product => {
@@ -39,13 +39,13 @@ export class CashRegisterComponent extends ProductOverviewComponent {
     }
 
     newIndividualProduct() {
-        this.individualProduct = new Product();
+        this.shop.register.individualProduct = new Product();
     }
 
     addIndividualProduct() {
-        if (this.individualProduct) {
-            this.shop.register.addProduct(this.individualProduct);
-            this.individualProduct = null;
+        if (this.shop.register.individualProduct) {
+            this.shop.register.addProduct(this.shop.register.individualProduct);
+            this.shop.register.individualProduct = null;
         }
     }
 }

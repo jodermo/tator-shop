@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ShopService } from '../../../shop.service';
 import { AppService } from '../../../../../tator-app/angular-app/src/app/services/app.service';
-import { ProductGroup } from '../../../api/product-group.entity';
 import { Product } from '../../../api/product.entity';
 
 @Component({
@@ -40,12 +39,12 @@ export class ProductOverviewComponent implements AfterViewInit, OnChanges {
             e.stopPropagation();
         }
         this.app.currentElement = product;
+        this.shop.register.individualProduct = null;
+        this.shop.register.sendDisplayData();
     }
 
     getProducts() {
-
         this.products = this.app.data.table('product');
-        console.log('getProducts', this.products);
     }
 
     filterProducts() {
@@ -73,7 +72,6 @@ export class ProductOverviewComponent implements AfterViewInit, OnChanges {
                 return false;
             });
         }
-        console.log('filterProducts', this.products);
     }
 
     addNewData(data) {

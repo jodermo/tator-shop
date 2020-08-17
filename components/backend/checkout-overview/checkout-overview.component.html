@@ -14,7 +14,7 @@
             <div class="horizontal-flex flex-item">
                 <label *ngIf="userSelection">
                     <select [(ngModel)]="userId" (change)="getResultData()">
-                        <option [ngValue]="null">{{app.text('all', 'shop')}}</option>
+                        <option [ngValue]="null">{{app.text('all_seller', 'shop')}}</option>
                         <option *ngFor="let id of availableUserIds" [ngValue]="id">
                             <span *ngIf="!app.userById(id).firstName && !app.userById(id).lastName">{{app.userById(id).login}}</span>
                             <span *ngIf="app.userById(id).firstName || app.userById(id).lastName">{{app.userById(id).firstName}} {{app.userById(id).lastName}}</span>
@@ -24,22 +24,29 @@
                 <label>
                     <input type="date" mwlFlatpickr
                            [(ngModel)]="startDate"
-                           (ngModelChange)="startDate = $event; getResultData()"
-                           dateFormat="Y-m-dTH:i"
-                           altFormat="F j, Y H:i"
-                           placeholder="Not set">
+                           (ngModelChange)="setStartDate($event, true);"
+                           [altInput]="true"
+                           [convertModelValue]="true"
+                           [defaultValue]="'today'">
                 </label>
                 <label>
                     <input type="date" mwlFlatpickr
                            [(ngModel)]="endDate"
-                           (ngModelChange)="endDate = $event; getResultData()"
-                           dateFormat="Y-m-dTH:i"
-                           altFormat="F j, Y H:i"
-                           placeholder="Not set">
+                           (ngModelChange)="setEndDate($event);"
+                           [altInput]="true"
+                           [convertModelValue]="true"
+                           [defaultValue]="'today'">
+                </label>
+                <label>
+                    <button class="today-button" (click)="today()"
+                            [ngClass]="{active:(startDate === todayStart && endDate === todayEnd)}">
+                        <span>{{app.text('today', 'shop')}}</span>
+                        <div class="icon-show"></div>
+                    </button>
                 </label>
             </div>
             <div class="horizontal-flex flex-item flex-end">
-                <h3>{{data.length}} {{app.text('sales', 'shop')}} = {{totalAmount}} €</h3>
+                <h3>{{data.length}} {{app.text('sales', 'shop')}} = {{app.helper.price(totalAmount, shop.register.currency.symbol)}}</h3>
                 <button class="save-button" (click)="exportTable()">
                     {{app.text('export', 'shop')}}
                 </button>
@@ -48,10 +55,13 @@
                 </button>
             </div>
         </div>
-        <div class="article-content" #tableElement>
+        <div *ngIf="data && data.length" class="article-content" #tableElement>
             <app-checkout-table [data]="data"></app-checkout-table>
         </div>
-        <div class="article-footer">
+        <div *ngIf="!data || !data.length">
+            <b><i>{{app.text('no_sells_in_period', 'shop')}}</i></b>
+        </div>
+        <div class="article-footer" *ngIf="data && data.length">
             <h3>{{data.length}} {{app.text('sales', 'shop')}} = {{totalAmount}} €</h3>
         </div>
     </div>

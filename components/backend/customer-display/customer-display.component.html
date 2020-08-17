@@ -1,0 +1,55 @@
+<div class="checkout-display" [ngClass]="{fullscreen:(app.helper.isFullscreen)}">
+    <div class="checkout-display-content">
+        <h1>{{app.text('cash_register', 'shop')}}</h1>
+        <h2 *ngIf="total && registerProducts && registerProducts.length">
+            <span>
+                {{total.amount}} {{app.text('products', 'shop')}} = {{total.net}} {{shop.defaultCurrency.symbol}}
+            </span><br><br>
+            <span>
+                {{app.text('checkout', 'shop')}}
+            </span>
+        </h2>
+        <div class="horizontal-flex">
+            <div *ngIf="currentProduct" class="full-height">
+                <app-product [product]="currentProduct" [barcodeDownload]="false" [amount]="(productAmount[currentProduct.id])"></app-product>
+            </div>
+            <div class="flex-item">
+                <div class="product-list list-result product-selection-result"
+                     *ngIf="registerProducts && registerProducts.length  && !checkoutData">
+                    <div class="list-item product-list-item active" *ngFor="let product of registerProducts">
+                        <div class="product-data" *ngIf="productAmount">
+                            <span>{{productAmount[product.id]}}x </span>
+                            <span> {{(product.name || product.id)}}</span>
+                            <span> à {{product.price}} {{price(product).symbol}}</span>
+                            <span> = {{price(product, productAmount[product.id]).gross}} {{price(product).symbol}}</span><br>
+                            <div *ngIf="price(product).tax">
+                                <b>+ {{price(product).tax.value}} %</b>
+                                <span>{{price(product).tax.name}}</span> <br>
+                                <span> = {{price(product, productAmount[product.id]).net}} {{price(product).symbol}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="checkoutData && !lastCheckout" class="checkout-display-content">
+                    <h1>{{app.text('cash_register', 'shop')}}</h1>
+                    <app-checkout-data [checkout]="checkoutData"></app-checkout-data>
+                </div>
+
+                <div *ngIf="lastCheckout" class="checkout-display-content">
+                    <h1>{{app.text('thank_you_for_shopping', 'shop')}}</h1>
+                    <h2>{{app.text('see_you_soon', 'shop')}}</h2>
+                    <div class="product-list" *ngIf="lastCheckout.data && lastCheckout.data.products">
+                        <app-product *ngFor="let product of lastCheckout.data.products" [amount]="(productAmount[product.id])"
+                                     [product]="product" [barcodeDownload]="false"></app-product>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+

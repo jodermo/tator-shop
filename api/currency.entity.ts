@@ -10,7 +10,7 @@ export class Currency {
 
   alias: string = null;
 
-  symbol: string = null;
+  symbol: string = '€';
 
   rate: number = null;
 

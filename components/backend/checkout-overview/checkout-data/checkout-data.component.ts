@@ -16,6 +16,7 @@ export class CheckoutDataComponent implements OnInit {
     @Input() checkout: Checkout;
     @Input() exportFileName = 'checkout';
     @Input() print = false;
+    @Input() showResult = true;
 
     constructor(public app: AppService, public shop: ShopService) {
     }

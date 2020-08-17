@@ -1,11 +1,4 @@
-<table class="mobile-table">
-    <thead>
-    <tr>
-        <th colspan="2">{{app.text('checkout_info', 'shop')}}</th>
-        <th>{{app.text('products', 'shop')}}</th>
-        <th class="print-hide"></th>
-    </tr>
-    </thead>
+<table class="spaced mobile-table">
     <tbody>
     <tr id="checkout_{{checkout.id}}" *ngFor="let checkout of data"
         [ngClass]="{active: (shop.lastCheckout && shop.lastCheckout.id === checkout.id)}">
@@ -39,7 +32,7 @@
                         </span>
         </th>
         <td>
-            <app-checkout-data [checkout]="checkout" ></app-checkout-data>
+            <app-checkout-data [checkout]="checkout"></app-checkout-data>
         </td>
         <td class="print-hide">
             <button class="print-hide" (click)="app.helper.printElementById('checkout_' + checkout.id )">

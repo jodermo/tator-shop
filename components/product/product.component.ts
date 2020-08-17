@@ -10,10 +10,12 @@ import { AppService } from '../../../../tator-app/angular-app/src/app/services/a
 })
 export class ProductComponent implements OnInit, OnChanges {
     @Input() product: Product;
-    @Input() cart = true;
-    @Input() edit = true;
+    @Input() cart = false;
+    @Input() edit = false;
     @Input() barcode = true;
+    @Input() barcodeDownload = true;
     @Input() layout = 'default';
+    @Input() amount = 1;
 
     reload;
     longDescription = false;

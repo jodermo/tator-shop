@@ -1,13 +1,18 @@
 <div class="product layout-{{layout}}">
     <div class="product-header">
-        <h3 *ngIf="product.name && product.name !== 'individual-product'">{{product.name}}</h3>
+        <h3 *ngIf="product.name && product.name !== 'individual-product'">
+            <span *ngIf="amount > 1">{{amount}}x</span>{{product.name}}
+        </h3>
         <h3 *ngIf="product.name && product.name === 'individual-product'">
             {{app.text(product.name, 'shop')}}
         </h3>
     </div>
     <div class="product-content">
-        <div class="product-image" *ngIf="product.imageId">
+        <div class="product-image" *ngIf="product.imageId && product.imageId >0">
             <app-file [file]="app.fileById(product.imageId)"></app-file>
+        </div>
+        <div class="product-image" *ngIf="!product.imageId || product.imageId <= 0">
+            <img src="assets/svg/product.svg"/>
         </div>
         <div class="product-files" *ngIf="product.files && product.files.length">
             <app-file-slider [fileIds]="product.files" [items]="1"></app-file-slider>
@@ -27,12 +32,12 @@
         </div>
         <div class="product-barcode" *ngIf="barcode">
             <app-barcode-generator *ngIf="product.itemNumber" [code]="product.itemNumber"
-                                   [download]="true"></app-barcode-generator>
+                                   [download]="barcodeDownload"></app-barcode-generator>
         </div>
     </div>
     <div class="product-footer">
         <div class="product-price">
-            <h4>{{product.price}}</h4>
+            <h2>{{app.helper.price(shop.productPrice(product, amount).net, shop.productPrice(product, amount).symbol)}}</h2>
         </div>
         <button *ngIf="cart" class="cart-button" (click)="shop.addToCart(product, 1)">
             {{app.text('add_to_cart', 'shop')}}

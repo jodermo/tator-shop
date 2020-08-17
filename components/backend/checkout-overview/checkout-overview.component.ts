@@ -2,6 +2,16 @@ import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '
 import { ShopService } from '../../../shop.service';
 import { AppService } from '../../../../../tator-app/angular-app/src/app/services/app.service';
 import { Checkout } from '../../../api/checkout.entity';
+import {
+    startOfDay,
+    endOfDay,
+    subDays,
+    addDays,
+    endOfMonth,
+    isSameDay,
+    isSameMonth,
+    addHours,
+} from 'date-fns';
 
 @Component({
     selector: 'app-checkout-overview',
@@ -13,10 +23,15 @@ export class CheckoutOverviewComponent implements OnInit {
 
     tableElement: HTMLTableElement;
 
-    @Input() startDate = null;
-    @Input() endDate = null;
+    todayStart = startOfDay(new Date());
+    todayEnd = endOfDay(new Date());
+
+
+    @Input() startDate: any = this.todayStart;
+    @Input() endDate: any = this.todayEnd;
     @Input() userId = null;
     @Input() userSelection = true;
+
 
     sort = {
         key: 'date',
@@ -36,21 +51,50 @@ export class CheckoutOverviewComponent implements OnInit {
 
     }
 
+    today() {
+        this.startDate = this.todayStart;
+        this.endDate = this.todayEnd;
+        this.getResultData();
+    }
+
+
     getCheckoutData() {
         this.data = this.app.data.table('checkout');
     }
 
     ngOnInit(): void {
-        this.getCheckoutData();
+
         if (this.userId) {
             this.availableUserIds.push(this.userId);
             this.userSelection = false;
         }
         this.getResultData();
+
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         this.getResultData();
+    }
+
+    setStartDate(date: any, setEndToSameDay = false) {
+
+        this.startDate = startOfDay(new Date(date));
+        if (setEndToSameDay) {
+            this.setEndDate(date);
+        } else {
+            this.getResultData();
+        }
+
+    }
+
+    setEndDate(date: any, setStartToSameDay = false) {
+
+        this.endDate = endOfDay(new Date(date));
+        if (setStartToSameDay) {
+            this.setStartDate(date);
+        } else {
+            this.getResultData();
+        }
     }
 
     getTableElement() {
@@ -60,16 +104,20 @@ export class CheckoutOverviewComponent implements OnInit {
     }
 
     getResultData() {
-
+        this.getCheckoutData();
 
         let startDate = null;
         let endDate = null;
+
+
         if (this.startDate) {
             startDate = Date.parse(this.startDate);
         }
         if (this.endDate) {
-            endDate = Date.parse(this.endDate) + 86400000; // add one day
+            endDate = Date.parse(this.endDate);
         }
+
+
 
         this.data = this.data.filter((checkout) => {
             let output = false;
@@ -140,8 +188,6 @@ export class CheckoutOverviewComponent implements OnInit {
         }
 
     }
-
-
 
 
 }

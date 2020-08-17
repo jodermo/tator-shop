@@ -19,6 +19,9 @@ import { TatorFormComponentsModule } from '../../tator-app/angular-app/src/app/m
 import { TatorUserComponentsModule } from '../../tator-app/angular-app/src/app/modules/tator-core/tator-user-components.module';
 import { TatorDataComponentsModule } from '../../tator-app/angular-app/src/app/modules/tator-core/tator-data-components.module';
 import { CashRegisterBarcodeDataComponent } from './components/backend/cash-register/cach-register-barcode-data/cash-register-barcode-data.component';
+import { FlatpickrModule } from 'angularx-flatpickr';
+import { PurchaseComponent } from './components/backend/purchase/purchase.component';
+import { CustomerDisplayComponent } from './components/backend/customer-display/customer-display.component';
 
 @NgModule({
     declarations: [
@@ -35,7 +38,9 @@ import { CashRegisterBarcodeDataComponent } from './components/backend/cash-regi
         CashRegisterSettingsComponent,
         CashRegisterBarcodeComponent,
         CashRegisterBarcodeDataComponent,
-        CalculatorComponent
+        CalculatorComponent,
+        PurchaseComponent,
+        CustomerDisplayComponent
     ],
     imports: [
         TatorImportsModule,
@@ -44,6 +49,7 @@ import { CashRegisterBarcodeDataComponent } from './components/backend/cash-regi
         TatorUiComponentsModule,
         TatorFormComponentsModule,
         TatorUserComponentsModule,
+        FlatpickrModule,
     ],
     providers: [],
     exports: [
@@ -60,7 +66,9 @@ import { CashRegisterBarcodeDataComponent } from './components/backend/cash-regi
         CashRegisterSettingsComponent,
         CashRegisterBarcodeComponent,
         CashRegisterBarcodeDataComponent,
-        CalculatorComponent
+        CalculatorComponent,
+        PurchaseComponent,
+        CustomerDisplayComponent
     ]
 })
 export class TatorShopModule {

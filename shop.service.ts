@@ -131,8 +131,12 @@ export class ShopService {
             this.loading = false;
         });
         this.app.websocket.onBarcode().subscribe(barcode => {
-            console.log('onBarcode', barcode);
-            this.onReceiveBarcode(barcode);
+            console.log('onBarcode', this.app.currentPage);
+            if (this.app.currentPage &&
+                (this.app.currentPage.alias === 'cash' || this.app.currentPage.alias === 'shop' || this.app.currentPage.alias === 'barcode')
+            ) {
+                this.onReceiveBarcode(barcode);
+            }
         });
         this.app.onDetectBarcode((barcode) => {
             this.onDetectBarcode(barcode);
@@ -234,7 +238,12 @@ export class ShopService {
         if (page) {
             this.app.showPage(page, category || null);
         }
-        this.app.currentElement = product;
+        this.app.currentElement = new Product();
+        setTimeout(() => {
+            this.app.currentElement = product;
+            this.register.sendDisplayData();
+        }, 0);
+
     }
 
     onReceiveBarcode(barcode: any) {
@@ -393,7 +402,7 @@ export class ShopService {
             gross: grossPrice,
             net: netPrice,
             symbol: symbol,
-            currency: currency,
+            currency:currency,
             tax: tax
         };
     }
