@@ -24,16 +24,25 @@ export class Purchase {
     description: any;
 
     @Column({nullable: true, default: 0})
-    amount: number;
+    price: number;
 
     @Column({nullable: true, default: 0})
     tip: number;
 
     @Column({nullable: true, default: null})
-    customerId: number;
+    currencyId: number;
 
     @Column({nullable: true, default: null})
     taxId: number;
+
+    @Column({nullable: true, default: null})
+    employeeId: number;
+
+    @Column({nullable: true, default: null})
+    customerId: number;
+
+    @Column({type: 'text', nullable: true, default: null})
+    files: any;
 
     @Column({type: 'text', nullable: true, default: null})
     data: any;

@@ -2,9 +2,22 @@
     <div class="article full flex-item">
         <div class="article-title">
             <span>{{app.text('barcodes', 'shop')}}</span>
+            <div class="horizontal-flex flex-item flex-end">
+                <button class="barcode-button" (click)="app.showPage('barcode', 'scan_barcode')">
+                    {{app.text('scan_barcode', 'shop')}}
+                </button>
+            </div>
         </div>
         <div class="article-content">
-            <app-barcode-data  [data]="app.barcodes"></app-barcode-data>
+            <app-barcode-data *ngIf="app.barcodes && app.barcodes.length" [data]="app.barcodes"></app-barcode-data>
+            <div class="info-box" *ngIf="!app.barcodes || !app.barcodes.length">
+                <b><i>{{app.text('no_barcodes_recorded', 'shop')}}</i></b>
+                <button (click)="app.showPage('barcode', 'scan_barcode')"
+                >
+                    {{app.text('scan_barcode', 'shop')}}
+                    <div class="icon-barcode"></div>
+                </button>
+            </div>
         </div>
     </div>
 </div>

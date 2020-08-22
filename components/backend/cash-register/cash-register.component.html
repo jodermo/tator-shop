@@ -13,14 +13,14 @@
         </div>
         <div class="article-content">
             <div class="list-selection">
-                <div class="list-item" (click)="selectedCategory = null;"
-                     [ngClass]="{active:(selectedCategory == null)}">
+                <div class="list-item" (click)="selectedType = null;"
+                     [ngClass]="{active:(selectedType === null)}">
                     {{app.text('all_types', 'shop')}}
                 </div>
                 <div class="list-item" *ngFor="let type of app.data.table('product-type')"
                      (click)="selectType(type)"
                      (dblclick)="shop.initSelection(); shop.currentProductType = type;"
-                     [ngClass]="{active:(selectedType == type)}">
+                     [ngClass]="{active:(selectedType === type)}">
                     <div><span>{{(type.name || type.id)}}</span></div>
                 </div>
             </div>
@@ -35,13 +35,13 @@
         <div class="article-content">
             <div class="list-selection">
                 <div class="list-item" (click)="selectedCategory = null; selectCategory()"
-                     [ngClass]="{active:(selectedCategory == null)}">
+                     [ngClass]="{active:(selectedCategory === null)}">
                     {{app.text('all_categories', 'shop')}}
                 </div>
                 <div class="list-item" *ngFor="let category of app.data.table('product-category')"
                      (click)="selectCategory(category)"
                      (dblclick)="shop.initSelection(); shop.currentProductCategory = category;"
-                     [ngClass]="{active:(selectedCategory == category)}">
+                     [ngClass]="{active:(selectedCategory === category)}">
                     <div><span>{{(category.name || category.id)}}</span></div>
                 </div>
             </div>
@@ -129,12 +129,8 @@
             <div class="horizontal-flex flex-item flex-end mobile-hide">
                 <app-change-user
                         (onShowSelection)="app.currentElement = null; shop.register.individualProduct = null; shop.register.checkoutData = null;"></app-change-user>
-                <button (click)="shop.setLocalSettings('receiveBarcode', !shop.localSettings.receiveBarcode)"
-                        [ngClass]="{active:(shop.localSettings.receiveBarcode)}">
-                    <div class="horizontal-flex">
-                        <div class="icon-barcode"></div>
-                        <div class="icon-cash-register"></div>
-                    </div>
+                <button class="config-button" (click)="app.showPage('cash', 'configuration')">
+                    {{app.text('configuration', 'shop')}}
                 </button>
                 <button class="show-button"
                         (click)="shop.setLocalSettings('showRegisterProduct', !shop.localSettings.showRegisterProduct)"
@@ -224,6 +220,17 @@
         </div>
         <div class="popup-content">
             <app-checkout-data [checkout]="shop.register.checkoutData" [showResult]="false"></app-checkout-data>
+            <label>
+                <span>+ {{app.text('tip', 'shop')}}  {{shop.register.currency.symbol}}</span>
+                <input type="number" [(ngModel)]="shop.register.checkoutData.tip" (change)="shop.register.calculateTotalPrice()" (keyup)="shop.register.calculateTotalPrice()"/>
+                <div class="horizontal-flex">
+                    <button class="flex-item" *ngFor="let amount of tipAmounts"
+                            (click)="shop.register.checkoutData.tip = amount; shop.register.calculateTotalPrice();"
+                            [ngClass]="{active:(shop.register.checkoutData.tip >= amount)}"
+                    >{{amount}} {{shop.register.currency.symbol}}
+                    </button>
+                </div>
+            </label>
             <div class="horizontal-flex full-width">
                 <h2><i>{{app.helper.price(shop.register.total.net, shop.register.currency.symbol)}}</i><br></h2>
             </div>

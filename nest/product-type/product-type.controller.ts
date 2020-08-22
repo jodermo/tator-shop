@@ -2,7 +2,7 @@ import { Get, Post, Controller, Param, Body, Delete, Patch } from '@nestjs/commo
 import { ProductTypeService } from './product-type.service';
 import { ProductType } from './product-type.entity';
 
-@Controller('api/product-category')
+@Controller('api/product-type')
 export class ProductTypeController {
     constructor(private readonly dataService: ProductTypeService) {
     }

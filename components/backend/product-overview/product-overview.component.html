@@ -9,28 +9,39 @@
         <div class="article-title">
             <span>{{app.text('product_types', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
-                <button class="new-button" (click)="shop.initSelection(); shop.newProductType()">
+                <button class="new-button" (click)="shop.initSelection(); shop.newProductType()"
+                        [ngClass]="{active:(shop.currentProductType && !shop.currentProductType.id)}"
+                >
                     {{app.text('new', 'shop')}}
                 </button>
                 <app-mobile-navigation [closeButton]="true"></app-mobile-navigation>
             </div>
         </div>
         <div class="article-content">
-            <div class="list-selection">
-                <div class="list-item" *ngIf="app.data.table('product-type').length"
-                     (click)="selectedCategory = null; selectType()"
-                     [ngClass]="{active:(selectedCategory == null)}">
+            <div class="list-selection" *ngIf="app.data.table('product-type').length">
+                <div class="list-item"
+                     (click)="selectedType = null; selectType()"
+                     [ngClass]="{active:(selectedType == null)}">
                     {{app.text('all_types', 'shop')}}
                 </div>
                 <div class="list-item" *ngFor="let type of app.data.table('product-type')"
                      (click)="selectType(type)"
                      (dblclick)="shop.initSelection(); shop.currentProductType = type;"
-                     [ngClass]="{active:(selectedCategory == type)}">
+                     [ngClass]="{active:(selectedType == type)}">
                     <div><span>{{(type.name || type.id)}}</span></div>
                     <button class="delete-button" (click)="shop.removeProductType(type)">
                         {{app.text('delete', 'shop')}}
                     </button>
                 </div>
+            </div>
+            <div class="info-box" *ngIf="!app.data.table('product-type').length">
+                <b><i>{{app.text('no_product_types', 'shop')}}</i></b>
+                <button (click)="shop.initSelection(); shop.newProductType()"
+                        [ngClass]="{active:(shop.currentProductType && !shop.currentProductType.id)}"
+                >
+                    {{app.text('new_product_type', 'shop')}}
+                    <div class="icon-new"></div>
+                </button>
             </div>
         </div>
     </div>
@@ -39,15 +50,17 @@
         <div class="article-title">
             <span>{{app.text('product_categories', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
-                <button class="new-button" (click)="shop.initSelection(); shop.newProductCategory()">
+                <button class="new-button" (click)="shop.initSelection(); shop.newProductCategory()"
+                        [ngClass]="{active:(shop.currentProductCategory && !shop.currentProductCategory.id)}"
+                >
                     {{app.text('new', 'shop')}}
                 </button>
                 <app-mobile-navigation [closeButton]="true"></app-mobile-navigation>
             </div>
         </div>
         <div class="article-content">
-            <div class="list-selection">
-                <div class="list-item" *ngIf="app.data.table('product-category').length"
+            <div class="list-selection" *ngIf="app.data.table('product-category').length">
+                <div class="list-item"
                      (click)="selectedCategory = null; selectCategory()"
                      [ngClass]="{active:(selectedCategory == null)}">
                     {{app.text('all_categories', 'shop')}}
@@ -62,6 +75,15 @@
                     </button>
                 </div>
             </div>
+            <div class="info-box" *ngIf="!app.data.table('product-category').length">
+                <b><i>{{app.text('no_product_categories', 'shop')}}</i></b>
+                <button (click)="shop.initSelection(); shop.newProductCategory()"
+                        [ngClass]="{active:(shop.currentProductCategory && !shop.currentProductCategory.id)}"
+                >
+                    {{app.text('new_product_category', 'shop')}}
+                    <div class="icon-new"></div>
+                </button>
+            </div>
         </div>
     </div>
     <div class="article full mobile-tab-content"
@@ -69,15 +91,17 @@
         <div class="article-title">
             <span>{{app.text('product_groups', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
-                <button class="new-button" (click)="shop.initSelection(); shop.newProductGroup()">
+                <button class="new-button" (click)="shop.initSelection(); shop.newProductGroup()"
+                        [ngClass]="{active:(shop.currentProductGroup && !shop.currentProductGroup.id)}"
+                >
                     {{app.text('new', 'shop')}}
                 </button>
                 <app-mobile-navigation [closeButton]="true"></app-mobile-navigation>
             </div>
         </div>
         <div class="article-content">
-            <div class="list-selection">
-                <div class="list-item" *ngIf="app.data.table('product-group').length"
+            <div class="list-selection" *ngIf="app.data.table('product-group').length">
+                <div class="list-item"
                      (click)="selectedGroup = null; selectGroup()"
                      [ngClass]="{active:(selectedGroup == null)}">
                     {{app.text('all_groups', 'shop')}}
@@ -91,12 +115,24 @@
                     </button>
                 </div>
             </div>
+            <div class="info-box" *ngIf="!app.data.table('product-group').length">
+                <b><i>{{app.text('no_product_groups', 'shop')}}</i></b>
+                <button (click)="shop.initSelection(); shop.newProductGroup()"
+                        [ngClass]="{active:(shop.currentProductGroup && !shop.currentProductGroup.id)}"
+                >
+                    {{app.text('new_product_group', 'shop')}}
+                    <div class="icon-new"></div>
+                </button>
+            </div>
         </div>
     </div>
     <div class="article full flex-item">
         <div class="article-title">
             <span>{{app.text('products', 'shop')}}</span>
             <div class="horizontal-flex flex-item flex-end">
+                <button class="config-button" (click)="app.showPage('shop', 'configuration')">
+                    {{app.text('configuration', 'shop')}}
+                </button>
                 <button class="list-button" (click)="productLayout = 'list'"
                         [ngClass]="{active:(productLayout === 'list')}">
                     {{app.text('list', 'shop')}}
@@ -105,13 +141,15 @@
                         [ngClass]="{active:(productLayout === 'products')}">
                     {{app.text('products', 'shop')}}
                 </button>
-                <button class="new-button" (click)="shop.initSelection(); shop.newProduct()">
+                <button class="new-button" (click)="shop.initSelection(); shop.newProduct()"
+                        [ngClass]="{active:(shop.currentProduct && !shop.currentProduct.id)}"
+                >
                     {{app.text('new', 'shop')}}
                 </button>
             </div>
         </div>
         <div class="article-content" *ngIf="products && products.length && productLayout === 'list'">
-            <app-data-selection [fileCategory]="'shop-product'" [tableName]="'product'" [data]="products"
+            <app-data-selection [fileCategory]="'shop'" [fileSubCategory]="'product'" [tableName]="'product'"  [data]="products"
                                 [fixedData]="true"
                                 [fieldOptions]="{
 
@@ -140,7 +178,15 @@
             <app-product-list [products]="products"></app-product-list>
         </div>
         <div class="article-content" *ngIf="!products || !products.length">
-            <b><i>{{app.text('no_products_available_for_selection', 'shop')}}</i></b>
+            <div class="info-box">
+                <b><i>{{app.text('no_products_available_for_selection', 'shop')}}</i></b>
+                <button (click)="shop.initSelection(); shop.newProduct()"
+                        [ngClass]="{active:(shop.currentProduct && !shop.currentProduct.id)}"
+                >
+                    {{app.text('new_product', 'shop')}}
+                    <div class="icon-new"></div>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -213,7 +259,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [autoSave]="true" [data]="shop.currentProductType"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'"  [fileSubCategory]="'product-type'" [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentProductType"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -235,7 +281,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [autoSave]="true" [data]="shop.currentProductCategory"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'"  [fileSubCategory]="'product-category'" [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentProductCategory"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -257,7 +303,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [autoSave]="true" [data]="shop.currentProductGroup"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'product-group'" [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentProductGroup"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -279,7 +325,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [autoSave]="true" [data]="shop.currentManufacturer"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'manufacturer'"  [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentManufacturer"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -301,7 +347,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [autoSave]="true" [data]="shop.currentCurrency"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'currency'" [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentCurrency"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -322,7 +368,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [autoSave]="true" [data]="shop.currentPayment"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'payment'" [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentPayment"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -343,7 +389,7 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [autoSave]="true" [data]="shop.currentShipping"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'shipping'"  [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentShipping"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -362,7 +408,7 @@
             <button class="close-button" (click)="shop.currentTax = null; shop.newProductValue = false;"></button>
         </div>
         <div class="popup-content">
-            <app-data-editor [autoSave]="true" [data]="shop.currentTax"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'tax'"  [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentTax"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -381,7 +427,7 @@
             <button class="close-button" (click)="shop.currentDiscount = null; shop.newProductValue = false;"></button>
         </div>
         <div class="popup-content">
-            <app-data-editor [autoSave]="true" [data]="shop.currentDiscount"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'discount'" [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentDiscount"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"

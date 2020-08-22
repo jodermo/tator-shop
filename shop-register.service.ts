@@ -19,7 +19,8 @@ export class ShopRegisterService {
     total = {
         amount: 0,
         gross: 0,
-        net: 0
+        net: 0,
+        tip: 0,
     };
     ready = false;
     checkoutData: Checkout;
@@ -29,7 +30,6 @@ export class ShopRegisterService {
     inputIsNet = false;
     individualProduct: Product = null;
     individualProducts: Product[] = [];
-
 
 
     constructor(public app: AppService) {
@@ -67,7 +67,7 @@ export class ShopRegisterService {
         this.sendDisplayData();
     }
 
-    calculateTotalPrice() {
+    calculateTotalPrice(tip = 0) {
         let grossPrice = 0;
         let netPrice = 0;
         let amount = 0;
@@ -76,9 +76,14 @@ export class ShopRegisterService {
             grossPrice += this.price(product, this.productAmount[product.id]).gross;
             netPrice += this.price(product, this.productAmount[product.id]).net;
         }
+        if (!tip && this.checkoutData) {
+            tip = this.checkoutData.tip;
+        }
+        netPrice += tip;
         this.total.amount = amount;
-        this.total.gross =  grossPrice;
-        this.total.net =  netPrice;
+        this.total.gross = grossPrice;
+        this.total.tip = tip;
+        this.total.net = netPrice;
     }
 
     price(product, amount = 1, currency: Currency = this.currency, tax: Tax = this.selectedTax, inputIsNet = this.inputIsNet) {

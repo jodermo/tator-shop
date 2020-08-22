@@ -1,10 +1,32 @@
 <div class="horizontal-flex full-height">
-    <div class="article full flex-item">
+    <div class="article flex-item">
+        <div class="article-title">
+            <span>{{app.text('seller', 'shop')}}</span>
+        </div>
+        <div class="article-content vertical-flex">
+            <app-change-user class="flex-item"
+                             (onShowSelection)="app.currentElement = null; shop.register.individualProduct = null; shop.register.checkoutData = null;"></app-change-user>
+        </div>
+    </div>
+    <div class="article flex-item">
         <div class="article-title">
             <span>{{app.text('configuration', 'shop')}}</span>
         </div>
         <div class="article-content">
-
+            <label (click)="shop.setLocalSettings('receiveBarcode', !shop.localSettings.receiveBarcode)">
+                <div class="checkbox" [ngClass]="{active:(shop.localSettings.receiveBarcode)}">
+                </div>
+                <span>
+                   <div class="horizontal-flex">
+                       <div class="gap-small">
+                            {{app.text('receive_barcode', 'shop')}}
+                       </div>
+                       <div class="icon-barcode"></div>
+                        <b class="gap-small" *ngIf="shop.localSettings.receiveBarcode"> ➤ </b>
+                        <div class="icon-cash-register" *ngIf="shop.localSettings.receiveBarcode"></div>
+                    </div>
+                </span>
+            </label>
         </div>
     </div>
 </div>

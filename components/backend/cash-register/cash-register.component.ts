@@ -15,8 +15,9 @@ export class CashRegisterComponent extends ProductOverviewComponent {
         'classic'
     ];
 
-    layout = this.layouts[0];
+    tipAmounts = [2, 5, 10, 15, 20];
 
+    layout = this.layouts[0];
 
 
     getProducts() {
@@ -40,6 +41,7 @@ export class CashRegisterComponent extends ProductOverviewComponent {
 
     newIndividualProduct() {
         this.shop.register.individualProduct = new Product();
+        this.shop.register.individualProduct.name = this.app.text('individual-product', 'shop');
     }
 
     addIndividualProduct() {

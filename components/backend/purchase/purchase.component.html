@@ -1,1 +1,66 @@
-<p>purchase works!</p>
+<div class="horizontal-flex full-height">
+    <div class="article full flex-item">
+        <div class="article-title">
+            <span>{{app.text('purchases', 'shop')}}</span>
+            <div class="horizontal-flex flex-item flex-end">
+                <button class="new-button" (click)="shop.initSelection(); shop.newPurchase()">
+                    {{app.text('new', 'shop')}}
+                </button>
+            </div>
+        </div>
+        <div class="article-content" *ngIf="app.data.table('purchase').length">
+            <app-data-selection [fileCategory]="'purchase'" [tableName]="'purchase'" [data]="app.data.table('purchase')"
+                                [fixedData]="true"
+                                [fieldOptions]="{
+                                    date: {name: 'date', type: 'date'},
+                                    userId: {name: 'user', type: 'user'},
+                                    customerId: {name: 'customer', type: 'user'},
+                                    currencyId: {name: 'currency', type: 'select', tableName: 'currency'},
+                                    taxId: {name: 'tax', type: 'select', tableName: 'tax'}
+                                }"
+                                [hiddenFields]="['id', 'alias', 'type']"
+                                [show]="shop.currentPurchase"
+                                [edit]="shop.currentPurchase"
+                                (onAddData)="shop.updateOrAddPurchase($event)"
+                                (onEntryShow)="shop.currentPurchase = $event"
+                                (onEntryEdit)="shop.currentPurchase = $event"
+
+            ></app-data-selection>
+        </div>
+        <div class="article-content" *ngIf="!app.data.table('purchase') || !app.data.table('purchase').length">
+            <div class="info-box">
+                <b><i>{{app.text('no_purchases', 'shop')}}</i></b>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="popup-overlay layout-{{app.popupLayout}}" [ngClass]="{active:(shop.currentPurchase)}">
+    <div class="popup-container" *ngIf="shop.currentPurchase">
+        <div class="popup-header">
+            <h3>{{app.text('purchase', 'shop')}}</h3>
+            <app-popup-options></app-popup-options>
+            <button class="close-button" (click)="shop.currentPurchase  = null;">
+                {{app.text('close', 'shop')}}
+            </button>
+        </div>
+        <div class="popup-content">
+            <app-data-editor [autoSave]="true" [data]="shop.currentPurchase"
+                             [fieldOptions]="{
+                                    date: {name: 'date', type: 'date'},
+                                    currencyId: {name: 'currency', type: 'select', tableName: 'currency'},
+                                    taxId: {name: 'tax', type: 'select', tableName: 'tax'},
+                                    employeeId: {name: 'employee', type: 'user'},
+                                    customerId: {name: 'customer', type: 'user'}
+                                }"
+                             [hiddenFields]="['id', 'alias', 'type', 'userId']"
+            ></app-data-editor>
+        </div>
+        <div class="popup-footer">
+            <button class="save-button"
+                    (click)="shop.updateOrAddPurchase(shop.currentPurchase); shop.currentPurchase = null; "
+                    [ngClass]="{inactive:(shop.updating)}">{{app.text('save', 'shop')}}
+            </button>
+        </div>
+    </div>
+</div>

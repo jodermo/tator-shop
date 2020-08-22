@@ -5,11 +5,14 @@ export class Product {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({nullable: true, default: null})
+    @Column{nullable: true, default: null})
     available: boolean = false;
 
     @Column({nullable: true, default: null, length: 500})
     name: string;
+
+    @Column({nullable: true, default: null})
+    userId: number;
 
     @Column({nullable: true, default: null, length: 500})
     alias: string;

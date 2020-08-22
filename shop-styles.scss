@@ -224,6 +224,33 @@ $register_item_width: 33.33%;
   }
 }
 
+
+.checkout-display {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  .checkout-display-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    > * {
+      text-align: center;
+    }
+  }
+}
+
+.individual-product {
+  app-calculator {
+    display: block;
+    margin-bottom: $gap_large;
+  }
+}
+
 .popup-content {
   .product {
     background: none;

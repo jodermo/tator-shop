@@ -14,10 +14,12 @@ import { AppService } from '../../tator-app/angular-app/src/app/services/app.ser
 import { ShopRegisterService } from './shop-register.service';
 import { ProductType } from './api/product-type.entity';
 import { Checkout } from './api/checkout.entity';
+import { Purchase } from './api/purchase.entity';
 
 
 export const ShopTables = [
     'product',
+    'product-type',
     'product-group',
     'product-category',
     'register-settings',
@@ -30,6 +32,7 @@ export const ShopTables = [
     'manufacturer',
     'tax',
     'order',
+    'purchase'
 ];
 
 
@@ -51,17 +54,18 @@ export class ShopService {
     ready = false;
     cart: CartObject[] = [];
 
-    currentOrder;
-    currentProduct;
-    currentProductType;
-    currentProductCategory;
-    currentProductGroup;
-    currentManufacturer;
-    currentPayment;
-    currentDiscount;
-    currentShipping;
-    currentCurrency;
-    currentTax;
+    currentOrder: Order;
+    currentProduct: Product;
+    currentProductType: ProductType;
+    currentProductCategory: ProductCategory;
+    currentProductGroup: ProductGroup;
+    currentManufacturer: Manufacturer;
+    currentPayment: Payment;
+    currentDiscount: Discount;
+    currentShipping: Shipping;
+    currentCurrency: Currency;
+    currentTax: Tax;
+    currentPurchase: Purchase;
 
     localSettings: any = {
         receiveBarcode: false,
@@ -79,6 +83,11 @@ export class ShopService {
         symbol: '€',
         rate: 1
     } as Currency;
+
+    defaultTax = {
+        name: 'Keine Steuer',
+        value: 0
+    } as Tax;
 
     productCategoryTypes = [
         'default'
@@ -288,7 +297,11 @@ export class ShopService {
         if (this.filterMethod === 'product_category' && this.filterValue) {
             this.currentProduct.categoryId = parseInt(this.filterValue, 10);
         } else if (this.filterMethod === 'product_group' && this.filterValue) {
-            this.currentProduct.groupId = parseInt(this.filterValue, 10);
+            if (this.currentProduct.groupIds) {
+                this.currentProduct.groupIds.push(parseInt(this.filterValue, 10));
+            } else {
+                this.currentProduct.groupIds = [parseInt(this.filterValue, 10)];
+            }
         }
         this.currentProduct.itemNumber = this.newItemNumber();
         return this.currentProduct;
@@ -402,7 +415,7 @@ export class ShopService {
             gross: grossPrice,
             net: netPrice,
             symbol: symbol,
-            currency:currency,
+            currency: currency,
             tax: tax
         };
     }
@@ -447,7 +460,7 @@ export class ShopService {
     }
 
     removeProductType(element: any, success: any = false) {
-        return this.removeProductCategoryById(element.id, success);
+        return this.removeProductTypeById(element.id, success);
     }
 
     removeProductTypeById(id: number, success: any = false) {
@@ -938,7 +951,69 @@ export class ShopService {
         }
     }
 
+
+    /* purchase */
+
+    newPurchase() {
+        this.currentPurchase = new Purchase();
+        this.currentPurchase.userId = this.app.user.id;
+        if (this.defaultCurrency) {
+            this.currentPurchase.currencyId = this.defaultCurrency.id;
+        }
+        if (this.defaultTax) {
+            this.currentPurchase.taxId = this.defaultTax.id;
+        }
+        return this.currentPurchase;
+    }
+
+    purchaseById(id: number) {
+        return this.app.data.byId('purchase', id);
+    }
+
+    addPurchase(element: any, success: any = false) {
+        this.app.data.add('purchase', element, (e) => {
+            if (success) {
+                success(e)
+            }
+        });
+    }
+
+    updatePurchase(element: any, success: any = false) {
+        this.app.data.update('purchase', element['id'], element, success);
+    }
+
+    updateOrAddPurchase(element: any) {
+        this.updating = true;
+        if (element['id']) {
+            this.updatePurchase(element, () => {
+                this.currentPurchase = null;
+                this.updating = false;
+            });
+        } else {
+            this.addPurchase(element, () => {
+                this.currentPurchase = null;
+                this.updating = false;
+            });
+        }
+    }
+
+    removePurchase(element: any, success: any = false) {
+        return this.removePurchaseById(element.id, success);
+    }
+
+    removePurchaseById(id: number, success: any = false) {
+        if (confirm(this.app.text('confirm_action'))) {
+            this.app.data.delete('purchase', id, success);
+        } else {
+            if (success) {
+                success(false);
+            }
+        }
+    }
+
+
     initSelection() {
+        this.newProductValue = false;
         this.currentProduct = null;
         this.currentProductGroup = null;
         this.currentProductCategory = null;
@@ -949,6 +1024,8 @@ export class ShopService {
         this.currentPayment = null;
         this.currentManufacturer = null;
         this.currentOrder = null;
+        this.currentProductType = null;
+        this.currentPurchase = null;
     }
 
 }

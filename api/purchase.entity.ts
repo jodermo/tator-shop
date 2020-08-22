@@ -1,26 +1,32 @@
 export class Purchase {
 
-    id: number;
+    id: number = null;
 
-    type: string;
+    type: string = 'default';
 
-    date: string;
+    date: any = Date.now();
 
-    name: string;
+    userId: number = null;
 
-    alias: string;
+    employeeId: number = null;
 
-    userId: number;
+    customerId: number = null;
 
-    description: any;
+    price: number = null;
 
-    amount: number;
+    tip: number = null;
 
-    tip: number;
+    currencyId: number = null;
 
-    customerId: number;
+    taxId: number = null;
 
-    taxId: number;
+    name: string = null;
 
-    data: any;
+    alias: string = null;
+
+    description: any = null;
+
+    files: any = [];
+
+    data: any = null;
 }

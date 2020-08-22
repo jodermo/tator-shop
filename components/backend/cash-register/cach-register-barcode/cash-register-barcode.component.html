@@ -2,6 +2,11 @@
     <div class="article full flex-item">
         <div class="article-title">
             <span>{{app.text('barcode_scanner', 'shop')}}</span>
+            <div class="horizontal-flex flex-item flex-end">
+                <button class="show-button" (click)="app.showPage('barcode', 'barcodes')">
+                    {{app.text('barcodes', 'shop')}}
+                </button>
+            </div>
         </div>
         <div class="article-content">
             <app-barcode-scanner [shop]="true" (onStart)="app.currentElement = null" (onDetect)="app.onDetectBarcode($event)"
