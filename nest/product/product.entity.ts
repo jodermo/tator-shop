@@ -5,7 +5,7 @@ export class Product {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column{nullable: true, default: null})
+    @Column({nullable: true, default: null})
     available: boolean = false;
 
     @Column({nullable: true, default: null, length: 500})
