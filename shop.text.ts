@@ -124,4 +124,9 @@ export let ShopText = [
     {alias: 'new_discount', en: 'New discount', de: 'Neuen Rabatt'},
     {alias: 'no_payment_available', en: 'No payment method available', de: 'Kein Bezahlverfahren verfügbar'},
     {alias: 'configuration_page', en: 'Go to configuration', de: 'Zur Konfiguration'},
+    {alias: 'list', en: 'List', de: 'Liste'},
+    {alias: 'cash', en: 'Cash', de: 'Bar'},
+    {alias: 'card', en: 'Card', de: 'Karte'},
+    {alias: 'online', en: 'Online', de: 'Online'},
+    {alias: 'device', en: 'Device', de: 'Gerät'},
 ];

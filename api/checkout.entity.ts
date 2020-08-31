@@ -1,12 +1,20 @@
+import { Column } from 'typeorm';
+
 export class Checkout {
 
     id: number = null;
 
     type: string = 'default';
 
-    date: any = Date.now();
+    startDate: any = Date.now();
+
+    endDate: any;
+
+    canceled = false;
 
     amount: number = 0;
+
+    given: number = 0;
 
     tip: number = 0;
 
@@ -22,6 +30,7 @@ export class Checkout {
 
     discountIds: any = [];
 
-    data: any = null;
+    history: any = [];
 
+    data: any = null;
 }

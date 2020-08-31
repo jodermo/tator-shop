@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Checkout {
+export class PaymentProcess {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -9,13 +9,7 @@ export class Checkout {
     type: string;
 
     @Column({nullable: true, default: null, length: 255})
-    startDate: string;
-
-    @Column({nullable: true, default: null, length: 255})
-    endDate: string;
-
-    @Column({nullable: true, default: false})
-    canceled: boolean;
+    date: string;
 
     @Column({nullable: true, default: 0})
     amount: number;
@@ -23,28 +17,27 @@ export class Checkout {
     @Column({nullable: true, default: 0})
     given: number;
 
-    @Column({nullable: true, default: 0})
-    tip: number;
-
     @Column({nullable: true, default: null})
     userId: number;
+
+    @Column({nullable: true, default: null})
+    checkoutId: number;
 
     @Column({nullable: true, default: null})
     customerId: number;
 
     @Column({nullable: true, default: null})
-    paymentId: number;
+    sellerId: number;
+
+    @Column({nullable: true, default: null, length: 30})
+    status: string;
 
     @Column({type: 'text', nullable: true, default: null})
-    discountIds: any;
-
-    @Column({nullable: true, default: null})
-    taxId: number;
+    message: any;
 
     @Column({type: 'text', nullable: true, default: null})
-    history: any;
+    attr: any;
 
     @Column({type: 'text', nullable: true, default: null})
     data: any;
-
 }

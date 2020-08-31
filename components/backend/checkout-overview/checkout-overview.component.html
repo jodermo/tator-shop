@@ -57,15 +57,12 @@
             </div>
         </div>
         <div *ngIf="data && data.length" class="article-content" #tableElement>
-            <app-checkout-table [data]="data"></app-checkout-table>
+            <app-checkout-table [data]="data" ></app-checkout-table>
         </div>
         <div *ngIf="!data || !data.length" class="article-content">
             <div class="info-box">
                 <b><i>{{app.text('no_sells_in_period', 'shop')}}</i></b>
             </div>
-        </div>
-        <div class="article-footer" *ngIf="data && data.length">
-            <h3>{{data.length}} {{app.text('sales', 'shop')}} = {{totalAmount}} €</h3>
         </div>
     </div>
 </div>

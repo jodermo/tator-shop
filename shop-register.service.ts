@@ -6,6 +6,7 @@ import { Checkout } from './api/checkout.entity';
 import { Payment } from './api/payment.entity';
 import { Tax } from './api/tax.entity';
 import { Currency } from './api/currency.entity';
+import { DisplayService } from '../../tator-app/angular-app/src/app/modules/tator-display/display.service';
 
 
 @Injectable({
@@ -24,6 +25,7 @@ export class ShopRegisterService {
     };
     ready = false;
     checkoutData: Checkout;
+    showCheckout = false;
 
     currency: Currency = new Currency();
     selectedTax: Tax;
@@ -32,7 +34,25 @@ export class ShopRegisterService {
     individualProducts: Product[] = [];
 
 
-    constructor(public app: AppService) {
+    constructor(public app: AppService, public display: DisplayService) {
+
+    }
+
+    loadLastCheckout() {
+        const lastCheckoutId = localStorage.getItem('last-checkout-id');
+        if (lastCheckoutId) {
+            this.checkoutData = this.app.data.byId('checkout', parseInt(lastCheckoutId));
+            if (this.checkoutData && this.checkoutData.data && this.checkoutData.data.products) {
+                for (const product of this.checkoutData.data.products) {
+                    console.log(product.type, product);
+                    if (product.type === 'individual') {
+                        this.individualProducts.push(product);
+                    }
+                    this.productAmount[product.id] = product.amount || 0;
+                    this.update();
+                }
+            }
+        }
     }
 
 
@@ -58,6 +78,7 @@ export class ShopRegisterService {
 
     init(shop: ShopService) {
         this.shop = shop;
+        this.loadLastCheckout();
         this.ready = true;
     }
 
@@ -79,7 +100,6 @@ export class ShopRegisterService {
         if (!tip && this.checkoutData) {
             tip = this.checkoutData.tip;
         }
-        netPrice += tip;
         this.total.amount = amount;
         this.total.gross = grossPrice;
         this.total.tip = tip;
@@ -102,7 +122,7 @@ export class ShopRegisterService {
     }
 
     addProduct(product: Product) {
-        this.checkoutData = null;
+
 
         if (product.id === 0 && product.type === 'individual') {
             product.id = this.uniqId();
@@ -115,8 +135,12 @@ export class ShopRegisterService {
             this.productAmount[product.id]++;
         }
         this.individualProduct = null;
-
         this.update();
+        if (!this.checkoutData) {
+            this.newCheckout()
+        } else {
+            this.updateCheckout(this.checkoutData);
+        }
         this.app.popupLayout = 'right';
         this.shop.showProduct(product, 'cash', 'cash_register');
         this.app.playAudio('scanner');
@@ -140,44 +164,79 @@ export class ShopRegisterService {
         }
     }
 
-    checkout() {
-        this.app.currentElement = null;
-        this.checkoutData = new Checkout();
-        this.checkoutData.data = this.getCheckoutData();
-        this.sendDisplayData();
+    newCheckout() {
+        if (!this.checkoutData || this.checkoutData.endDate) {
+            const checkout = new Checkout();
+
+            this.addNewCheckout(checkout, (result) => {
+                console.log('newCheckout', result);
+                this.checkoutData = result as Checkout;
+                localStorage.setItem('last-checkout-id', String(this.checkoutData.id));
+                this.sendDisplayData();
+            });
+        }
+
     }
 
     confirmCheckout(payment: Payment) {
-        if (confirm(this.app.text('confirm_action'))) {
-            this.addNewCheckout(payment, (result) => {
-                this.checkoutDone(result as Checkout);
+        if (this.checkoutData && confirm(this.app.text('confirm_action'))) {
+            this.checkoutData.paymentId = payment.id;
+            this.checkoutData.endDate = Date.now();
+            this.app.currentElement = null;
+            this.updateCheckout(this.checkoutData, (result) => {
+                this.checkoutDone(this.checkoutData);
             });
         }
+    }
+
+    cancelCheckout() {
+        this.checkoutData.canceled = true;
+        this.checkoutData.endDate = Date.now();
+        this.updateCheckout(this.checkoutData, (result) => {
+            this.checkoutData = null;
+            localStorage.removeItem('last-checkout-id');
+        });
     }
 
     checkoutDone(checkout: Checkout) {
         this.shop.lastCheckout = checkout;
         this.app.playAudio('cash');
         this.app.showPage('cash', 'checkout_overview');
+        this.checkoutData = null;
+        localStorage.removeItem('last-checkout-id');
         this.clearProducts();
         this.sendDisplayData();
     }
 
-    addNewCheckout(payment: Payment, success: any = null) {
-        if (this.checkoutData) {
-            this.checkoutData.amount = this.total.net;
-            this.checkoutData.userId = this.app.user.id;
-            this.checkoutData.data = this.checkoutData;
-            this.checkoutData.paymentId = payment.id;
-            this.checkoutData.data = this.getCheckoutData();
-            this.app.data.add('checkout', this.checkoutData, (e) => {
-                this.checkoutData = null;
-
+    addNewCheckout(checkout: Checkout, success: any = null) {
+        if (checkout) {
+            checkout.amount = this.total.net;
+            checkout.userId = this.app.user.id;
+            checkout.data = this.checkoutData;
+            checkout.history = this.getCheckoutHistory();
+            checkout.data = this.getCheckoutData();
+            this.app.data.add('checkout', checkout, (e) => {
                 if (success) {
                     success(e);
                 }
             });
         }
+    }
+
+    updateCheckout(checkout = this.checkoutData, success: any = null) {
+        if (checkout) {
+            checkout.history = this.getCheckoutHistory();
+            checkout.data = this.getCheckoutData();
+            this.app.data.update('checkout', checkout.id, checkout, (e) => {
+                if (success) {
+                    success(e);
+                }
+            });
+        }
+    }
+
+    getCheckoutHistory() {
+        return [];
     }
 
     getCheckoutData() {
@@ -192,6 +251,7 @@ export class ShopRegisterService {
 
             checkoutProducts.push({
                 id: product.id,
+                type: product.type,
                 itemNumber: product.itemNumber,
                 name: product.name,
                 description: product.description,

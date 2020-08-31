@@ -133,11 +133,7 @@
                 <button class="config-button" (click)="app.showPage('shop', 'configuration')">
                     {{app.text('configuration', 'shop')}}
                 </button>
-                <button class="list-button" (click)="productLayout = 'list'"
-                        [ngClass]="{active:(productLayout === 'list')}">
-                    {{app.text('list', 'shop')}}
-                </button>
-                <button class="list-button" (click)="productLayout = 'products'"
+                <button class="show-button" (click)="toggleLayout()"
                         [ngClass]="{active:(productLayout === 'products')}">
                     {{app.text('products', 'shop')}}
                 </button>
@@ -149,7 +145,8 @@
             </div>
         </div>
         <div class="article-content" *ngIf="products && products.length && productLayout === 'list'">
-            <app-data-selection [fileCategory]="'shop'" [fileSubCategory]="'product'" [tableName]="'product'"  [data]="products"
+            <app-data-selection [fileCategory]="'shop'" [fileSubCategory]="'product'" [tableName]="'product'"
+                                [data]="products"
                                 [fixedData]="true"
                                 [fieldOptions]="{
 
@@ -259,7 +256,8 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [fileCategory]="'shop'"  [fileSubCategory]="'product-type'" [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentProductType"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'product-type'" [hiddenFields]="['type']"
+                             [autoSave]="true" [data]="shop.currentProductType"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -281,7 +279,8 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [fileCategory]="'shop'"  [fileSubCategory]="'product-category'" [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentProductCategory"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'product-category'" [hiddenFields]="['type']"
+                             [autoSave]="true" [data]="shop.currentProductCategory"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -303,7 +302,8 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'product-group'" [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentProductGroup"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'product-group'" [hiddenFields]="['type']"
+                             [autoSave]="true" [data]="shop.currentProductGroup"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -325,7 +325,8 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'manufacturer'"  [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentManufacturer"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'manufacturer'" [hiddenFields]="['type']"
+                             [autoSave]="true" [data]="shop.currentManufacturer"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -347,7 +348,8 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'currency'" [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentCurrency"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'currency'" [hiddenFields]="['type']"
+                             [autoSave]="true" [data]="shop.currentCurrency"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -368,7 +370,8 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'payment'" [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentPayment"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'payment'" [hiddenFields]="['type']"
+                             [autoSave]="true" [data]="shop.currentPayment"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -389,7 +392,8 @@
             </button>
         </div>
         <div class="popup-content">
-            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'shipping'"  [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentShipping"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'shipping'" [hiddenFields]="['type']"
+                             [autoSave]="true" [data]="shop.currentShipping"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -408,7 +412,8 @@
             <button class="close-button" (click)="shop.currentTax = null; shop.newProductValue = false;"></button>
         </div>
         <div class="popup-content">
-            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'tax'"  [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentTax"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'tax'" [hiddenFields]="['type']"
+                             [autoSave]="true" [data]="shop.currentTax"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"
@@ -427,7 +432,8 @@
             <button class="close-button" (click)="shop.currentDiscount = null; shop.newProductValue = false;"></button>
         </div>
         <div class="popup-content">
-            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'discount'" [hiddenFields]="['type']" [autoSave]="true" [data]="shop.currentDiscount"></app-data-editor>
+            <app-data-editor [fileCategory]="'shop'" [fileSubCategory]="'discount'" [hiddenFields]="['type']"
+                             [autoSave]="true" [data]="shop.currentDiscount"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"

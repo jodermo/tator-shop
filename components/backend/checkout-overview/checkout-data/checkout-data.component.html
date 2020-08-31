@@ -1,4 +1,4 @@
-<table *ngIf="checkout.data && checkout.data.products" id="checkoutData_{{checkout.id}}" >
+<table *ngIf="checkout.data && checkout.data.products" id="checkoutData_{{checkout.id}}">
     <thead>
     <tr>
         <th>{{app.text('product', 'shop')}}</th>
@@ -45,6 +45,7 @@
         </td>
         <td>
             <h4>{{app.helper.price(checkout.amount, shop.register.currency.symbol)}}</h4>
+            <i *ngIf="checkout.tip > 0">+ {{app.helper.price(checkout.tip, shop.register.currency.symbol)}} {{app.text('tip', 'shop')}} ( {{app.helper.price(checkout.amount + checkout.tip, shop.register.currency.symbol)}} )</i>
         </td>
         <td *ngIf="print" class="print-hide"></td>
     </tr>

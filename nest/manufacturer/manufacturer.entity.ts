@@ -21,6 +21,9 @@ export class Manufacturer {
     logo: number;
 
     @Column({nullable: true, default: null, length: 500})
+    website: string;
+
+    @Column({nullable: true, default: null, length: 500})
     description: string;
 
     @Column({nullable: true, default: null, length: 500})

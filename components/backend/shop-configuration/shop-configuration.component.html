@@ -229,7 +229,9 @@
             <button class="close-button" (click)="shop.currentPayment = null"></button>
         </div>
         <div class="popup-content">
-            <app-data-editor [fileCategory]="'shop'" [hiddenFields]="['type']" [data]="shop.currentPayment"></app-data-editor>
+            <app-data-editor [fieldOptions]="{
+            type: {name: 'type', type: 'select', data: shop.paymentTypes}
+            }"  [fileCategory]="'shop'" [hiddenFields]="[]" [data]="shop.currentPayment"></app-data-editor>
         </div>
         <div class="popup-footer">
             <button class="save-button"

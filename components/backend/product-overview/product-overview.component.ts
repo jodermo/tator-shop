@@ -130,5 +130,14 @@ export class ProductOverviewComponent implements AfterViewInit, OnChanges {
         this.filterProducts();
     }
 
+    toggleLayout() {
+        if (this.productLayout !== 'list') {
+            this.productLayout = 'list';
+        } else {
+            this.productLayout = 'products';
+        }
+
+    }
+
 
 }

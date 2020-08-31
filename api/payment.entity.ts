@@ -2,7 +2,7 @@ export class Payment {
 
   id: number = null;
 
-  type: string = 'default';
+  type: string = 'cash';
 
   name: string = null;
 

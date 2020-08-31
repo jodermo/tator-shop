@@ -17,12 +17,13 @@ export class CheckoutDataComponent implements OnInit {
     @Input() exportFileName = 'checkout';
     @Input() print = false;
     @Input() showResult = true;
+    @Input() showTip = false;
 
     constructor(public app: AppService, public shop: ShopService) {
     }
 
     ngOnInit(): void {
-
+        console.log(this.checkout);
     }
 
     getTableElement() {

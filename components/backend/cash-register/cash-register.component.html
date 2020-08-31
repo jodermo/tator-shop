@@ -13,17 +13,22 @@
         </div>
         <div class="article-content">
             <div class="list-selection">
-                <div class="list-item" (click)="selectedType = null;"
+                <div class="list-item" (click)="selectedType = null; selectType(); app.showMobileTab('select_products');"
                      [ngClass]="{active:(selectedType === null)}">
                     {{app.text('all_types', 'shop')}}
                 </div>
                 <div class="list-item" *ngFor="let type of app.data.table('product-type')"
-                     (click)="selectType(type)"
+                     (click)="selectType(type); app.showMobileTab('select_products');"
                      (dblclick)="shop.initSelection(); shop.currentProductType = type;"
                      [ngClass]="{active:(selectedType === type)}">
                     <div><span>{{(type.name || type.id)}}</span></div>
                 </div>
             </div>
+        </div>
+        <div class="article-footer mobile-show">
+            <button class="close-button" (click)="app.showMobileTab(null);">
+                {{app.text('close', 'shop')}}
+            </button>
         </div>
     </div>
     <div class="article full mobile-article-small mobile-tab-content" *ngIf="app.data.table('product-category').length"
@@ -34,12 +39,12 @@
         </div>
         <div class="article-content">
             <div class="list-selection">
-                <div class="list-item" (click)="selectedCategory = null; selectCategory()"
+                <div class="list-item" (click)="selectedCategory = null; selectCategory(); app.showMobileTab('select_products');"
                      [ngClass]="{active:(selectedCategory === null)}">
                     {{app.text('all_categories', 'shop')}}
                 </div>
                 <div class="list-item" *ngFor="let category of app.data.table('product-category')"
-                     (click)="selectCategory(category)"
+                     (click)="selectCategory(category);  app.showMobileTab('select_products');"
                      (dblclick)="shop.initSelection(); shop.currentProductCategory = category;"
                      [ngClass]="{active:(selectedCategory === category)}">
                     <div><span>{{(category.name || category.id)}}</span></div>
@@ -55,12 +60,13 @@
         </div>
         <div class="article-content">
             <div class="list-selection">
-                <div class="list-item" (click)="selectedGroup = null; selectGroup()"
+                <div class="list-item" (click)="selectedGroup = null; selectGroup(); app.showMobileTab('select_products');"
                      [ngClass]="{active:(selectedGroup == null)}">
                     {{app.text('all_groups', 'shop')}}
                 </div>
                 <div class="list-item" *ngFor="let group of app.data.table('product-group')"
-                     (click)="selectGroup(group)" (dblclick)="shop.initSelection(); shop.currentProductGroup = group;"
+                     (click)="selectGroup(group);  app.showMobileTab('select_products');"
+                     (dblclick)="shop.initSelection(); shop.currentProductGroup = group;"
                      [ngClass]="{active:(selectedGroup == group)}">
                     <div><span> {{(group.name || group.id)}}</span></div>
                 </div>
@@ -74,7 +80,7 @@
             <div class="horizontal-flex flex-item flex-end">
                 <!-- <button *ngFor="let l of layouts" [ngClass]="{active:(l === layout)}"
                          (click)="layoutChange(l)">{{app.text('layout_' + l, 'shop')}}</button>-->
-                <button class="edit-button" (click)="app.showPage('shop', 'products')">
+                <button class="edit-button mobile-hide" (click)="app.showPage('shop', 'products')">
                     {{app.text('edit', 'shop')}}
                 </button>
                 <app-mobile-navigation [closeButton]="true"></app-mobile-navigation>
@@ -101,6 +107,9 @@
 
                 <div class="list-item product-list-item" *ngFor="let product of products"
                      (click)="shop.register.addProduct(product)">
+                    <div class="product-amount" *ngIf="shop.register.productAmount[product.id]">
+                        <span>{{shop.register.productAmount[product.id]}}x </span>
+                    </div>
                     <div class="product-name">
                         <h3>{{(product.name || product.id)}}</h3>
                     </div>
@@ -174,7 +183,7 @@
             <button class="checkout-button"
                     [ngClass]="{inactive:(!shop.register.registerProducts || !shop.register.registerProducts.length),
                     active:(shop.register.checkoutData)}"
-                    (click)="shop.register.checkout(); app.currentElement = null; shop.register.individualProduct = null;">
+                    (click)="shop.register.showCheckout = true; app.currentElement = null; shop.register.individualProduct = null;">
 
                 <i>{{app.helper.price(shop.register.total.net, shop.register.currency.symbol)}}</i><br>
                 <span>
@@ -220,9 +229,13 @@
         </div>
         <div class="popup-content">
             <app-checkout-data [checkout]="shop.register.checkoutData" [showResult]="false"></app-checkout-data>
+            <div class="horizontal-flex full-width">
+                <h2><i>{{app.helper.price(shop.register.total.net, shop.register.currency.symbol)}}</i><br></h2>
+            </div>
             <label>
                 <span>+ {{app.text('tip', 'shop')}}  {{shop.register.currency.symbol}}</span>
-                <input type="number" [(ngModel)]="shop.register.checkoutData.tip" (change)="shop.register.calculateTotalPrice()" (keyup)="shop.register.calculateTotalPrice()"/>
+                <input type="number" [(ngModel)]="shop.register.checkoutData.tip"
+                       (change)="shop.register.calculateTotalPrice()" (keyup)="shop.register.calculateTotalPrice()"/>
                 <div class="horizontal-flex">
                     <button class="flex-item" *ngFor="let amount of tipAmounts"
                             (click)="shop.register.checkoutData.tip = amount; shop.register.calculateTotalPrice();"
@@ -231,8 +244,8 @@
                     </button>
                 </div>
             </label>
-            <div class="horizontal-flex full-width">
-                <h2><i>{{app.helper.price(shop.register.total.net, shop.register.currency.symbol)}}</i><br></h2>
+            <div class="horizontal-flex full-width" *ngIf="shop.register.checkoutData.tip > 0">
+                <h2><i>{{app.helper.price(shop.register.total.net + shop.register.checkoutData.tip, shop.register.currency.symbol)}}</i><br></h2>
             </div>
         </div>
         <div class="popup-footer">

@@ -125,13 +125,13 @@ export class CheckoutOverviewComponent implements OnInit {
                 output = true;
             } else if (startDate && endDate) {
                 output = (
-                    parseInt(checkout.date, 10) >= startDate &&
-                    parseInt(checkout.date, 10) <= endDate
+                    parseInt(checkout.endDate, 10) >= startDate &&
+                    parseInt(checkout.endDate, 10) <= endDate
                 );
             } else if (startDate) {
-                output = parseInt(checkout.date, 10) >= startDate;
+                output = parseInt(checkout.endDate, 10) >= startDate;
             } else if (endDate) {
-                output = parseInt(checkout.date, 10) <= endDate;
+                output = parseInt(checkout.endDate, 10) <= endDate;
             }
             if (output && this.userId) {
                 output = checkout.userId === this.userId;

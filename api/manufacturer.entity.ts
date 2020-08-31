@@ -1,36 +1,40 @@
+import { Column } from 'typeorm';
+
 export class Manufacturer {
 
-  id: number = null;
+    id: number = null;
 
-  type: string = 'default';
+    type: string = 'default';
 
-  name: string = null;
+    name: string = null;
 
-  userId: number = null;
+    userId: number = null;
 
-  email: string = null;
+    email: string = null;
 
-  logo: number = null;
+    logo: number = null;
 
-  description: string = null;
+    website: string = null;
 
-  tel: string = null;
+    description: string = null;
 
-  fax: string = null;
+    tel: string = null;
 
-  mobile: string = null;
+    fax: string = null;
 
-  country: string = null;
+    mobile: string = null;
 
-  state: string = null;
+    country: string = null;
 
-  city: string = null;
+    state: string = null;
 
-  zip: string = null;
+    city: string = null;
 
-  street: string = null;
+    zip: string = null;
 
-  streetAdditional: string = null;
+    street: string = null;
 
-  number: string = null;
+    streetAdditional: string = null;
+
+    number: string = null;
 }

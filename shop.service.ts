@@ -111,7 +111,10 @@ export class ShopService {
     ];
 
     paymentTypes = [
-        'default'
+        'cash',
+        'card',
+        'online',
+        'device'
     ];
 
     productTypes = [
