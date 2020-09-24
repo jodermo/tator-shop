@@ -1,17 +1,17 @@
 export class Currency {
 
-  id: number = null;
+    id: number = null;
 
-  type: string = 'default';
+    type: string = 'default';
 
-  name: string = null;
+    name: string = 'Euro';
 
-  iso: string = null;
+    iso: string = 'EUR';
 
-  alias: string = null;
+    alias: string = 'euro';
 
-  symbol: string = '€';
+    symbol: string = '€';
 
-  rate: number = null;
+    rate: number = 1;
 
 }

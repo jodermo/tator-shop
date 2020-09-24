@@ -1,5 +1,27 @@
 import { BackendPage } from '../../tator-app/angular-app/src/app/classes/backend.page';
+import { AppConfig, BackendStartPage } from '../../config/app.config';
+import { ShopText } from './shop.text';
 
+export class ShopConfig extends AppConfig {
+    config = {
+        itemNumber: 'item#########'
+    };
+    backendPages = [
+        CashRegisterBackend,
+        CashDisplayBackend,
+        BarcodeBackend,
+    ];
+    defaultText = ShopText;
+    backendStartPage = {
+        page: 'cash',
+        category: 'cash_register'
+    } as BackendStartPage;
+    jsonFields: [
+        'groupIds',
+        'shippingIds',
+    ];
+    jsonTableFields: {};
+}
 
 export const CashRegisterBackend: BackendPage = {
     alias: 'cash',
@@ -23,7 +45,6 @@ export const CashDisplayBackend: BackendPage = {
     restriction: 'employee',
 } as BackendPage;
 
-
 export const BarcodeBackend: BackendPage = {
     alias: 'barcode',
     icon: 'barcode',
@@ -36,12 +57,3 @@ export const BarcodeBackend: BackendPage = {
         {alias: 'cash_register', icon: 'cash-register', page: 'cash', category: 'cash_register'},
     ]
 } as BackendPage;
-
-
-export const ShopDatabaseConfig = {
-    jsonFields: [
-        'groupIds',
-        'shippingIds',
-    ],
-    jsonTableFields: {},
-};

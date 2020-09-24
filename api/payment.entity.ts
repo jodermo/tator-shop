@@ -4,7 +4,7 @@ export class Payment {
 
   type: string = 'cash';
 
-  name: string = null;
+  name: string = 'Barzahlung';
 
   description: any = null;
 

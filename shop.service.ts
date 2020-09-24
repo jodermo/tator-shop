@@ -9,7 +9,6 @@ import { Payment } from './api/payment.entity';
 import { Shipping } from './api/shipping.entity';
 import { Tax } from './api/tax.entity';
 import { Currency } from './api/currency.entity';
-import { ShopConfig } from '../../config/shop.config';
 import { AppService } from '../../tator-app/angular-app/src/app/services/app.service';
 import { ShopRegisterService } from './shop-register.service';
 import { ProductType } from './api/product-type.entity';
@@ -47,8 +46,6 @@ export class CartObject {
     providedIn: 'root'
 })
 export class ShopService {
-
-    config = ShopConfig;
     loading = true;
     updating = false;
     ready = false;
@@ -311,7 +308,7 @@ export class ShopService {
     }
 
     newItemNumber() {
-        const segments = this.config.itemNumber.split('#');
+        const segments = this.app.config.itemNumber.split('#');
         const productCount = this.app.data.table('product').length + 1;
         const productCountString = productCount + '';
         let itemNumber = '';
